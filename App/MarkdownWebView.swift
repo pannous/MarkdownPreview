@@ -8,6 +8,7 @@ private let markdownExtensions: Set<String> = ["md", "markdown", "mdown", "mkd",
 /// WKWebView showing the rendered file; re-renders on save by swapping the body so the scroll position stays.
 struct MarkdownWebView: NSViewRepresentable {
     let fileURL: URL
+    @AppStorage(Zoom.defaultsKey) private var zoom = 1.0
 
     func makeCoordinator() -> Coordinator { Coordinator(fileURL: fileURL) }
 
@@ -18,7 +19,9 @@ struct MarkdownWebView: NSViewRepresentable {
         return webView
     }
 
-    func updateNSView(_ webView: WKWebView, context: Context) {}
+    func updateNSView(_ webView: WKWebView, context: Context) {
+        webView.pageZoom = zoom
+    }
 
     final class Coordinator: NSObject, WKNavigationDelegate {
         private let fileURL: URL

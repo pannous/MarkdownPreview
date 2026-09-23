@@ -18,6 +18,8 @@ struct MarkdownDocument: FileDocument {
 /// A viewer has nothing to show once its last window (or tab) is closed, so quit instead of idling in the Dock.
 final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { true }
+
+    func applicationDidFinishLaunching(_ notification: Notification) { Zoom.installKeyboardShortcuts() }
 }
 
 @main
@@ -33,5 +35,6 @@ struct MarkdownPreviewApp: App {
             }
         }
         .defaultSize(width: 980, height: 1100)
+        .commands { ZoomCommands() }
     }
 }
