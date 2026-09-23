@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><meta name="color-scheme" content="light dark">
+<title>sample.md</title><style>:root {
+  color-scheme: light dark;
+  --text: #1f2328; --muted: #59636e; --background: #ffffff;
+  --border: #d1d9e0; --subtle: #f6f8fa; --link: #0969da; --row: #f6f8fa;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #e6edf3; --muted: #9198a1; --background: #0d1117;
+    --border: #3d444d; --subtle: #151b23; --link: #4493f8; --row: #151b23;
+  }
+}
+html { background: var(--background); }
+body {
+  margin: 0; color: var(--text); background: var(--background);
+  font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.markdown-body { max-width: 900px; margin: 0 auto; padding: 32px 40px 64px; word-wrap: break-word; }
+.markdown-body > :first-child { margin-top: 0; }
+h1, h2, h3, h4, h5, h6 { margin: 1.5em 0 0.6em; font-weight: 600; line-height: 1.25; }
+h1 { font-size: 2em; padding-bottom: 0.3em; border-bottom: 1px solid var(--border); }
+h2 { font-size: 1.5em; padding-bottom: 0.3em; border-bottom: 1px solid var(--border); }
+h3 { font-size: 1.25em; } h4 { font-size: 1em; } h5 { font-size: 0.875em; } h6 { font-size: 0.85em; color: var(--muted); }
+p, blockquote, ul, ol, dl, table, pre, details { margin: 0 0 16px; }
+a { color: var(--link); text-decoration: none; } a:hover { text-decoration: underline; }
+hr { height: 0.25em; margin: 24px 0; border: 0; background: var(--border); }
+img { max-width: 100%; }
+blockquote { margin-left: 0; padding: 0 1em; color: var(--muted); border-left: 0.25em solid var(--border); }
+ul, ol { padding-left: 2em; } li + li { margin-top: 0.25em; }
+li:has(> input[type=checkbox]) { list-style: none; }
+li > input[type=checkbox] { margin: 0 0.4em 0 -1.4em; vertical-align: middle; }
+code, pre { font: 0.875em/1.45 ui-monospace, "SF Mono", Menlo, monospace; }
+:not(pre) > code { padding: 0.2em 0.4em; border-radius: 6px; background: var(--subtle); }
+pre { padding: 16px; overflow: auto; border-radius: 6px; background: var(--subtle); }
+pre > code, pre > code.hljs { padding: 0; font-size: 1em; background: transparent; }
+table { display: block; width: max-content; max-width: 100%; overflow: auto; border-collapse: collapse; border-spacing: 0; }
+th, td { padding: 6px 13px; border: 1px solid var(--border); }
+th { font-weight: 600; background: var(--subtle); }
+tr:nth-child(2n) td { background: var(--row); }
+kbd { padding: 2px 5px; font-size: 0.8em; border: 1px solid var(--border); border-radius: 6px; background: var(--subtle); }
+pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5px}/*!
+  Theme: GitHub
+  Description: Light theme as seen on github.com
+  Author: github.com
+  Maintainer: @Hirse
+  Updated: 2021-05-15
+
+  Outdated base version: https://github.com/primer/github-syntax-light
+  Current colors taken from GitHub's CSS
+*/.hljs{color:#24292e;background:#fff}.hljs-doctag,.hljs-keyword,.hljs-meta .hljs-keyword,.hljs-template-tag,.hljs-template-variable,.hljs-type,.hljs-variable.language_{color:#d73a49}.hljs-title,.hljs-title.class_,.hljs-title.class_.inherited__,.hljs-title.function_{color:#6f42c1}.hljs-attr,.hljs-attribute,.hljs-literal,.hljs-meta,.hljs-number,.hljs-operator,.hljs-selector-attr,.hljs-selector-class,.hljs-selector-id,.hljs-variable{color:#005cc5}.hljs-meta .hljs-string,.hljs-regexp,.hljs-string{color:#032f62}.hljs-built_in,.hljs-symbol{color:#e36209}.hljs-code,.hljs-comment,.hljs-formula{color:#6a737d}.hljs-name,.hljs-quote,.hljs-selector-pseudo,.hljs-selector-tag{color:#22863a}.hljs-subst{color:#24292e}.hljs-section{color:#005cc5;font-weight:700}.hljs-bullet{color:#735c0f}.hljs-emphasis{color:#24292e;font-style:italic}.hljs-strong{color:#24292e;font-weight:700}.hljs-addition{color:#22863a;background-color:#f0fff4}.hljs-deletion{color:#b31d28;background-color:#ffeef0}@media (prefers-color-scheme: dark) {pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5px}/*!
+  Theme: GitHub Dark
+  Description: Dark theme as seen on github.com
+  Author: github.com
+  Maintainer: @Hirse
+  Updated: 2021-05-15
+
+  Outdated base version: https://github.com/primer/github-syntax-dark
+  Current colors taken from GitHub's CSS
+*/.hljs{color:#c9d1d9;background:#0d1117}.hljs-doctag,.hljs-keyword,.hljs-meta .hljs-keyword,.hljs-template-tag,.hljs-template-variable,.hljs-type,.hljs-variable.language_{color:#ff7b72}.hljs-title,.hljs-title.class_,.hljs-title.class_.inherited__,.hljs-title.function_{color:#d2a8ff}.hljs-attr,.hljs-attribute,.hljs-literal,.hljs-meta,.hljs-number,.hljs-operator,.hljs-selector-attr,.hljs-selector-class,.hljs-selector-id,.hljs-variable{color:#79c0ff}.hljs-meta .hljs-string,.hljs-regexp,.hljs-string{color:#a5d6ff}.hljs-built_in,.hljs-symbol{color:#ffa657}.hljs-code,.hljs-comment,.hljs-formula{color:#8b949e}.hljs-name,.hljs-quote,.hljs-selector-pseudo,.hljs-selector-tag{color:#7ee787}.hljs-subst{color:#c9d1d9}.hljs-section{color:#1f6feb;font-weight:700}.hljs-bullet{color:#f2cc60}.hljs-emphasis{color:#c9d1d9;font-style:italic}.hljs-strong{color:#c9d1d9;font-weight:700}.hljs-addition{color:#aff5b4;background-color:#033a16}.hljs-deletion{color:#ffdcd7;background-color:#67060c}}</style></head>
+<body><article id="content" class="markdown-body"><h1 id="markdownpreview-sample">MarkdownPreview sample</h1>
+<p>Quick check of <strong>GitHub-flavoured</strong> Markdown: <em>emphasis</em>, <del>strikethrough</del>, <code>inline code</code>, and an autolink <a href="https://github.com">https://github.com</a>.</p>
+<h2 id="table">Table</h2>
+<table>
+<thead>
+<tr>
+<th align="left">Renderer</th>
+<th align="center">Tables</th>
+<th align="center">Browser needed</th>
+<th align="right">Verdict</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">glow</td>
+<td align="center">text</td>
+<td align="center">no</td>
+<td align="right">rejected</td>
+</tr>
+<tr>
+<td align="left">pandoc + Chromium</td>
+<td align="center">yes</td>
+<td align="center">yes</td>
+<td align="right">rejected</td>
+</tr>
+<tr>
+<td align="left">MarkdownPreview.app</td>
+<td align="center">yes</td>
+<td align="center">no</td>
+<td align="right"><strong>used</strong></td>
+</tr>
+</tbody></table>
+<h2 id="code">Code</h2>
+<pre><code class="hljs language-swift"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Greeting</span> {
+    <span class="hljs-keyword">let</span> name: <span class="hljs-type">String</span>
+    <span class="hljs-keyword">func</span> <span class="hljs-title function_">render</span>() -&gt; <span class="hljs-type">String</span> { <span class="hljs-string">&quot;Hello, <span class="hljs-subst">\(name)</span>!&quot;</span> }  <span class="hljs-comment">// highlighted</span>
+}</code></pre>
+<pre><code class="hljs language-python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">fib</span>(<span class="hljs-params">n: <span class="hljs-built_in">int</span></span>) -&gt; <span class="hljs-built_in">int</span>:
+    <span class="hljs-keyword">return</span> n <span class="hljs-keyword">if</span> n &lt; <span class="hljs-number">2</span> <span class="hljs-keyword">else</span> fib(n - <span class="hljs-number">1</span>) + fib(n - <span class="hljs-number">2</span>)</code></pre>
+<h2 id="tasks">Tasks</h2>
+<ul>
+<li><input checked="" disabled="" type="checkbox"> tables with borders</li>
+<li><input checked="" disabled="" type="checkbox"> syntax highlighting</li>
+<li><input disabled="" type="checkbox"> world domination</li>
+</ul>
+<h2 id="image-relative-to-the-file">Image relative to the file</h2>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAAoCAYAAAA16j4lAAABTklEQVR4nO3RUUYEAABAwZUkSZIkSZJkJUmSJEmSJEmSJEmSJEmSJCtJkiRJkiRJkiRJkiRJVpIkSZIkSdIVtneNeB9zggkEA+FIMArRiEEs4hCPBCQiCclIQSrSkI4MZCIL2chBELnIQz4KUIgiFKMEpShDOSpQiSpUowa1qEM9GtCIJjSjBa1oQzs60IkudKMHvehDPwYwiCEMYwSjGEMI45jAJKYwjRnMYg7zWMAilrCMFaxiDevYwCa2sI0d7GIP+zjAIY5wjBOc4gznuMAlrhDGNW5wizvc4wGPeMIzXvCKN7zjA5/4wjd+8BuOBAw22GCDDTbYYIMNNthggw022GCDDTbYYIMNNthggw022GCDDTbYYIMNNthggw022GCDDTbYYIMNNthggw022GCDDTbYYIMNNthggw022GCDDTbYYIMNNthgg/9n8B+rJfsV4E3+XwAAAABJRU5ErkJggg==" alt="gradient"></p>
+<blockquote>
+<p>Blockquote: links open in the default browser only when clicked — <a href="https://example.com">example.com</a>, <a href="#table">jump to Table</a>, <a href="other.md">other file</a>.</p>
+</blockquote>
+</article></body></html>
