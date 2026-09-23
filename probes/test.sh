@@ -1,6 +1,6 @@
 #!/bin/bash
 # Real end-to-end checks against the installed app: renderer output, Quick Look registration + preview, app window.
-# Screenshots land in probes/ for visual inspection (quicklook.png, app_window.png). HEADLESS=1 skips the window checks.
+# Screenshots land in probes/ for visual inspection (quicklook.png, app_window.png). Window checks only run with UI=1.
 set -uo pipefail
 
 PROBES="$(cd "$(dirname "$0")" && pwd)"
@@ -32,7 +32,7 @@ check "renderer loads no remote scripts/styles" loads_no_remote_assets
 check "Quick Look extension enabled" bash -c "pluginkit -m -v -i $EXTENSION_ID | grep -q '^+'"
 check "Markdown extension listed" bash -c "pluginkit -m -v | grep -qi markdown"
 
-if [ -n "${HEADLESS:-}" ]; then  # HEADLESS=1: skip checks that open windows and steal focus
+if [ -z "${UI:-}" ]; then  # window checks open windows and steal focus: only with UI=1
   echo "$failures failure(s) (headless)"
   exit "$failures"
 fi

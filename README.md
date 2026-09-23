@@ -18,7 +18,8 @@ Native macOS Markdown viewer plus a Quick Look extension, both backed by one ren
 
 ```sh
 ./install.sh   # xcodegen + xcodebuild, installs ~/Applications/MarkdownPreview.app, registers app and extension
-probes/test.sh # end-to-end checks; writes probes/quicklook.png and probes/app_window.png
+probes/test.sh      # headless checks: renderer output, extension registration
+UI=1 probes/test.sh # plus window checks (brings windows to front); writes probes/quicklook.png, probes/app_window.png
 ```
 
 Needs Xcode and XcodeGen (`brew install xcodegen`). Signing uses the local "Apple Development" identity; override with `SIGN_IDENTITY=-` for ad hoc, and set your own `DEVELOPMENT_TEAM` in `project.yml`.
