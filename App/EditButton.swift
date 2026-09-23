@@ -3,6 +3,8 @@ import SwiftUI
 
 /// First installed editor wins; override with `defaults write com.pannous.MarkdownPreview editorBundleIdentifier <bundle id>`.
 private let editorOverrideKey = "editorBundleIdentifier"
+/// Keeps the button clear of the web view's overlay scroller.
+private let scrollerClearance: CGFloat = 20
 private let preferredEditorBundleIdentifiers = ["com.sublimetext.4", "com.sublimetext.3", "com.microsoft.VSCode", "com.apple.TextEdit"]
 
 enum Editor {
@@ -31,5 +33,6 @@ struct EditButton: View {
             .buttonStyle(.bordered)
             .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 6))
             .padding(12)
+            .padding(.trailing, scrollerClearance)
     }
 }
