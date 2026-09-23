@@ -20,7 +20,9 @@ struct MarkdownPreviewApp: App {
     var body: some Scene {
         DocumentGroup(viewing: MarkdownDocument.self) { file in
             if let fileURL = file.fileURL {
-                MarkdownWebView(fileURL: fileURL).frame(minWidth: 480, minHeight: 360)
+                MarkdownWebView(fileURL: fileURL)
+                    .overlay(alignment: .topTrailing) { EditButton(fileURL: fileURL) }
+                    .frame(minWidth: 480, minHeight: 360)
             }
         }
         .defaultSize(width: 980, height: 1100)
