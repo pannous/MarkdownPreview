@@ -1,0 +1,40 @@
+:root {
+  color-scheme: light dark;
+  --text: #1f2328; --muted: #59636e; --background: #ffffff;
+  --border: #d1d9e0; --subtle: #f6f8fa; --link: #0969da; --row: #f6f8fa;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #e6edf3; --muted: #9198a1; --background: #0d1117;
+    --border: #3d444d; --subtle: #151b23; --link: #4493f8; --row: #151b23;
+  }
+}
+html { background: var(--background); }
+body {
+  margin: 0; color: var(--text); background: var(--background);
+  font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.markdown-body { max-width: 900px; margin: 0 auto; padding: 32px 40px 64px; word-wrap: break-word; }
+.markdown-body > :first-child { margin-top: 0; }
+h1, h2, h3, h4, h5, h6 { margin: 1.5em 0 0.6em; font-weight: 600; line-height: 1.25; }
+h1 { font-size: 2em; padding-bottom: 0.3em; border-bottom: 1px solid var(--border); }
+h2 { font-size: 1.5em; padding-bottom: 0.3em; border-bottom: 1px solid var(--border); }
+h3 { font-size: 1.25em; } h4 { font-size: 1em; } h5 { font-size: 0.875em; } h6 { font-size: 0.85em; color: var(--muted); }
+p, blockquote, ul, ol, dl, table, pre, details { margin: 0 0 16px; }
+a { color: var(--link); text-decoration: none; } a:hover { text-decoration: underline; }
+hr { height: 0.25em; margin: 24px 0; border: 0; background: var(--border); }
+img { max-width: 100%; }
+blockquote { margin-left: 0; padding: 0 1em; color: var(--muted); border-left: 0.25em solid var(--border); }
+ul, ol { padding-left: 2em; } li + li { margin-top: 0.25em; }
+li:has(> input[type=checkbox]) { list-style: none; }
+li > input[type=checkbox] { margin: 0 0.4em 0 -1.4em; vertical-align: middle; }
+code, pre { font: 0.875em/1.45 ui-monospace, "SF Mono", Menlo, monospace; }
+:not(pre) > code { padding: 0.2em 0.4em; border-radius: 6px; background: var(--subtle); }
+pre { padding: 16px; overflow: auto; border-radius: 6px; background: var(--subtle); }
+pre > code, pre > code.hljs { padding: 0; font-size: 1em; background: transparent; }
+table { display: block; width: max-content; max-width: 100%; overflow: auto; border-collapse: collapse; border-spacing: 0; }
+th, td { padding: 6px 13px; border: 1px solid var(--border); }
+th { font-weight: 600; background: var(--subtle); }
+tr:nth-child(2n) td { background: var(--row); }
+kbd { padding: 2px 5px; font-size: 0.8em; border: 1px solid var(--border); border-radius: 6px; background: var(--subtle); }
