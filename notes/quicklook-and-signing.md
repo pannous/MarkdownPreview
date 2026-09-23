@@ -33,3 +33,8 @@
 - The swiftly toolchain (Swift 6.0.3) can't import CoreGraphics from the macOS 27 SDK; compile probes with `xcrun swiftc`.
 - System Events `key code` did not scroll the web view; `cliclick c:x,y kp:page-down` does.
 - Documents open as tabs when the system "prefer tabs" setting is on; `open -a` deduplication comes from `NSDocumentController` behind `DocumentGroup`.
+
+## App icon cache
+- The Dock / ⌘Tab switcher caches app icons by bundle path + modification time. `ditto` keeps the build's timestamp,
+  so after adding the icon the switcher kept the generic icon from the first (icon-less) launch.
+  `install.sh` now `touch`es the installed bundle. `probes/app_icon.swift <app> out.png` dumps what the system really serves.

@@ -5,3 +5,4 @@ DerivedData/
 probes/window_id
 probes/render_cli
 probes/scroll
+probes/app_icon

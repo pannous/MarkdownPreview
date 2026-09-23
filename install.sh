@@ -23,6 +23,7 @@ osascript -e "quit app \"$APP_NAME\"" 2>/dev/null || true
 mkdir -p "$INSTALL_DIR"
 rm -rf "$INSTALLED_APP"
 ditto "$BUILT_APP" "$INSTALLED_APP"
+touch "$INSTALLED_APP"  # ditto keeps the build timestamp; a fresh one makes the Dock/app switcher drop cached icons
 
 "$LSREGISTER" -f -R -trusted "$INSTALLED_APP"
 pluginkit -a "$INSTALLED_APP/Contents/PlugIns/MarkdownQuickLook.appex"
