@@ -1,3 +1,5 @@
+<img src="App/Assets.xcassets/AppIcon.appiconset/icon_128x128@2x.png" width="128" align="right">
+
 # MarkdownPreview
 
 Native macOS Markdown viewer plus a Quick Look extension, both backed by one renderer.
@@ -10,6 +12,8 @@ Native macOS Markdown viewer plus a Quick Look extension, both backed by one ren
   override with `defaults write com.pannous.MarkdownPreview editorBundleIdentifier <bundle id>`).
 - Finder space bar and Spotlight show the same rendering through the embedded Quick Look extension.
 
+![MarkdownPreview window](probes/app_window.png)
+
 ## Build & install
 
 ```sh
@@ -17,7 +21,7 @@ Native macOS Markdown viewer plus a Quick Look extension, both backed by one ren
 probes/test.sh # end-to-end checks; writes probes/quicklook.png and probes/app_window.png
 ```
 
-Needs Xcode and XcodeGen (`brew install xcodegen`). Signing uses the local "Apple Development" identity; override with `SIGN_IDENTITY=-` for ad hoc.
+Needs Xcode and XcodeGen (`brew install xcodegen`). Signing uses the local "Apple Development" identity; override with `SIGN_IDENTITY=-` for ad hoc, and set your own `DEVELOPMENT_TEAM` in `project.yml`.
 
 ## Layout
 
