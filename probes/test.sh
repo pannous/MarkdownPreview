@@ -1,6 +1,6 @@
 #!/bin/bash
 # Real end-to-end checks against the installed app: renderer output, Quick Look registration + preview, app window.
-# Screenshots land in probes/ for visual inspection (quicklook.png, app_window.png).
+# Screenshots land in probes/ for visual inspection (quicklook.png, app_window.png). HEADLESS=1 skips the window checks.
 set -uo pipefail
 
 PROBES="$(cd "$(dirname "$0")" && pwd)"
@@ -24,11 +24,18 @@ html="$(./render_cli "$SAMPLE")"
 for fragment in '<table>' '<th align="center">Tables</th>' 'class="hljs-keyword"' 'type="checkbox"' 'src="data:image/png;base64,' '<h2 id="table">' 'href="https://example.com"'; do
   check "renderer emits $fragment" grep -qF "$fragment" <<<"$html"
 done
+check "user-installed fonts named for rare glyphs" grep -qF -- '--fallback-fonts: "Oracular", "開元小篆"' <(./render_cli "$PROBES/fonts/rare_glyphs.md")
+check "no fallback fonts when system fonts suffice" bash -c "! grep -q '<style>:root' <<<\"\$0\"" "$html"
 loads_no_remote_assets() { ! grep -qE '<(script|link)[^>]+(src|href)="http' <<<"$html"; }
 check "renderer loads no remote scripts/styles" loads_no_remote_assets
 
 check "Quick Look extension enabled" bash -c "pluginkit -m -v -i $EXTENSION_ID | grep -q '^+'"
 check "Markdown extension listed" bash -c "pluginkit -m -v | grep -qi markdown"
+
+if [ -n "${HEADLESS:-}" ]; then  # HEADLESS=1: skip checks that open windows and steal focus
+  echo "$failures failure(s) (headless)"
+  exit "$failures"
+fi
 
 qlmanage -p "$SAMPLE" >/dev/null 2>&1 &
 sleep 4

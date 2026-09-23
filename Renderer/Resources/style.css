@@ -12,7 +12,7 @@
 html { background: var(--background); }
 body {
   margin: 0; color: var(--text); background: var(--background);
-  font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+  font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif, var(--fallback-fonts, sans-serif);
   -webkit-font-smoothing: antialiased;
 }
 .markdown-body { max-width: 900px; margin: 0 auto; padding: 32px 40px 64px; word-wrap: break-word; }
@@ -29,7 +29,7 @@ blockquote { margin-left: 0; padding: 0 1em; color: var(--muted); border-left: 0
 ul, ol { padding-left: 2em; } li + li { margin-top: 0.25em; }
 li:has(> input[type=checkbox]) { list-style: none; }
 li > input[type=checkbox] { margin: 0 0.4em 0 -1.4em; vertical-align: middle; }
-code, pre { font: 0.875em/1.45 ui-monospace, "SF Mono", Menlo, monospace; }
+code, pre { font: 0.875em/1.45 ui-monospace, "SF Mono", Menlo, monospace, var(--fallback-fonts, monospace); }
 :not(pre) > code { padding: 0.2em 0.4em; border-radius: 6px; background: var(--subtle); }
 pre { padding: 16px; overflow: auto; border-radius: 6px; background: var(--subtle); }
 pre > code, pre > code.hljs { padding: 0; font-size: 1em; background: transparent; }

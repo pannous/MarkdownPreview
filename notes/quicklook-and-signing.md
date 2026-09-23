@@ -38,3 +38,16 @@
 - The Dock / ⌘Tab switcher caches app icons by bundle path + modification time. `ditto` keeps the build's timestamp,
   so after adding the icon the switcher kept the generic icon from the first (icon-less) launch.
   `install.sh` now `touch`es the installed bundle. `probes/app_icon.swift <app> out.png` dumps what the system really serves.
+
+## Rare glyphs / user-installed fonts
+- WebKit's per-character fallback only uses system fonts, so characters covered solely by a font in `~/Library/Fonts`
+  (e.g. Plane-15 private use U+F50D7 → "Oracular", Plane-3 U+3F27C → "開元小篆") render as boxes unless the family is
+  named in CSS. Chromium and CoreText do search user fonts.
+- `UserFontFallback` lays out the document's distinct non-ASCII characters as one `CTLine`; CoreText's fallback (backed
+  by the system font service's own coverage index) picks fonts per run, and every picked font whose file is outside
+  `/System/` goes into `--fallback-fonts`, which style.css appends to the body and code font stacks.
+- Deliberately no own codepoint→font index/cache: it would duplicate CoreText's index and could go stale; cost is
+  ~0.3–6 ms per rare char, ~0.27 s for an extreme 6000-distinct-CJK document.
+- Works unchanged in the sandboxed Quick Look extension (user fonts are visible there).
+- Probes: `probes/fonts/rare_glyphs.md`, `covering_fonts.swift` (families covering codepoints), `cascade_timing.swift`
+  (CoreText's pick + timing); build them with `xcrun swiftc` (the swiftly swiftc breaks CoreText).

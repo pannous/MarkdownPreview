@@ -36,7 +36,8 @@ public final class MarkdownRenderer {
     public func renderBody(markdown: String, baseDirectory: URL?) -> String {
         lock.lock(); defer { lock.unlock() }
         self.baseDirectory = baseDirectory
-        return context.objectForKeyedSubscript("renderMarkdown").call(withArguments: [markdown]).toString() ?? ""
+        let html = context.objectForKeyedSubscript("renderMarkdown").call(withArguments: [markdown]).toString() ?? ""
+        return UserFontFallback.styleElement(for: markdown) + html
     }
 
     /// Body for a Markdown file on disk, with images relative to the file's folder.

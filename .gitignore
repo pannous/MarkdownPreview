@@ -6,3 +6,5 @@ probes/window_id
 probes/render_cli
 probes/scroll
 probes/app_icon
+probes/fonts/covering_fonts
+probes/fonts/cascade_timing
