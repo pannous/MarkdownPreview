@@ -1,0 +1,88 @@
+name: MarkdownPreview
+options:
+  bundleIdPrefix: com.pannous
+  deploymentTarget:
+    macOS: "14.0"
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    CODE_SIGN_STYLE: Manual
+    CODE_SIGN_IDENTITY: "Apple Development"
+    DEVELOPMENT_TEAM: T7AR9Y9X4N
+    ENABLE_HARDENED_RUNTIME: NO
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+targets:
+  MarkdownRenderer:
+    type: framework
+    platform: macOS
+    sources: [Renderer]
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        PRODUCT_BUNDLE_IDENTIFIER: com.pannous.MarkdownRenderer
+
+  MarkdownPreview:
+    type: application
+    platform: macOS
+    sources: [App]
+    dependencies:
+      - target: MarkdownRenderer
+      - target: MarkdownQuickLook
+    entitlements:
+      path: App/MarkdownPreview.entitlements
+      properties:
+        com.apple.security.app-sandbox: false
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.pannous.MarkdownPreview
+    info:
+      path: App/Info.plist
+      properties:
+        CFBundleDisplayName: MarkdownPreview
+        LSApplicationCategoryType: public.app-category.developer-tools
+        CFBundleDocumentTypes:
+          - CFBundleTypeName: Markdown
+            CFBundleTypeRole: Viewer
+            LSHandlerRank: Default
+            LSItemContentTypes: [net.daringfireball.markdown]
+        UTImportedTypeDeclarations:
+          - UTTypeIdentifier: net.daringfireball.markdown
+            UTTypeDescription: Markdown Document
+            UTTypeConformsTo: [public.plain-text]
+            UTTypeReferenceURL: https://daringfireball.net/projects/markdown/
+            UTTypeTagSpecification:
+              public.filename-extension: [md, markdown, mdown, mkd, mkdn]
+              public.mime-type: [text/markdown]
+
+  MarkdownQuickLook:
+    type: app-extension
+    platform: macOS
+    sources: [QuickLook]
+    dependencies:
+      - target: MarkdownRenderer
+        embed: false
+      - sdk: Quartz.framework
+    entitlements:
+      path: QuickLook/MarkdownQuickLook.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+        com.apple.security.files.user-selected.read-only: true
+        # lets the sandboxed extension inline images that sit next to the previewed file
+        com.apple.security.temporary-exception.files.absolute-path.read-only: ["/"]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.pannous.MarkdownPreview.QuickLook
+        LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks"
+    info:
+      path: QuickLook/Info.plist
+      properties:
+        CFBundleDisplayName: Markdown Quick Look
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.quicklook.preview
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).PreviewProvider
+          NSExtensionAttributes:
+            QLIsDataBasedPreview: true
+            QLSupportsSearchableItems: false
+            QLSupportedContentTypes: [net.daringfireball.markdown]
