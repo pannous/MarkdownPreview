@@ -9,6 +9,7 @@ Native macOS Markdown viewer plus a Quick Look extension, both backed by one ren
 - Live reload on save (also atomic saves), scroll position kept. Links open in the default browser only when clicked; relative `.md` links open in the app.
 - `open -a MarkdownPreview file.md` on an already open file focuses its window.
 - Zoom with ⌘ or ⌃ and `+`/`=` / `-`/`_` (Shift optional), reset with ⌘0; shared by all windows and remembered.
+- Collapse sections level by level with ⌘[ or ⌃[ (deepest open level first), expand with ⌘] or ⌃]; click a heading to fold just it. Folds survive live reload.
 - Floating **Edit** button (⌘E) opens the file in Sublime Text (falls back to VS Code, then TextEdit;
   override with `defaults write com.pannous.MarkdownPreview editorBundleIdentifier <bundle id>`).
 - Finder space bar and Spotlight show the same rendering through the embedded Quick Look extension.

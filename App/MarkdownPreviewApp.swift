@@ -19,7 +19,10 @@ struct MarkdownDocument: FileDocument {
 final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { true }
 
-    func applicationDidFinishLaunching(_ notification: Notification) { Zoom.installKeyboardShortcuts() }
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        Zoom.installKeyboardShortcuts()
+        Folding.installKeyboardShortcuts()
+    }
 }
 
 @main
@@ -35,6 +38,9 @@ struct MarkdownPreviewApp: App {
             }
         }
         .defaultSize(width: 980, height: 1100)
-        .commands { ZoomCommands() }
+        .commands {
+            ZoomCommands()
+            FoldingCommands()
+        }
     }
 }

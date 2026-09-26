@@ -4,6 +4,9 @@ import SwiftUI
 import WebKit
 
 private let markdownExtensions: Set<String> = ["md", "markdown", "mdown", "mkd", "mkdn"]
+private let foldingScript = WKUserScript(
+    source: (try? String(contentsOf: Bundle.main.url(forResource: "folding", withExtension: "js")!, encoding: .utf8)) ?? "",
+    injectionTime: .atDocumentEnd, forMainFrameOnly: true)
 
 /// WKWebView showing the rendered file; re-renders on save by swapping the body so the scroll position stays.
 struct MarkdownWebView: NSViewRepresentable {
@@ -13,7 +16,9 @@ struct MarkdownWebView: NSViewRepresentable {
     func makeCoordinator() -> Coordinator { Coordinator(fileURL: fileURL) }
 
     func makeNSView(context: Context) -> WKWebView {
-        let webView = WKWebView()
+        let configuration = WKWebViewConfiguration()
+        configuration.userContentController.addUserScript(foldingScript)
+        let webView = WKWebView(frame: .zero, configuration: configuration)
         webView.navigationDelegate = context.coordinator
         context.coordinator.attach(webView)
         return webView
@@ -27,19 +32,26 @@ struct MarkdownWebView: NSViewRepresentable {
         private let fileURL: URL
         private weak var webView: WKWebView?
         private var watcher: FileWatcher?
+        private var foldingObserver: NSObjectProtocol?
 
         init(fileURL: URL) { self.fileURL = fileURL }
+
+        deinit { foldingObserver.map(NotificationCenter.default.removeObserver) }
 
         func attach(_ webView: WKWebView) {
             self.webView = webView
             webView.loadHTMLString(MarkdownRenderer.shared.renderPage(fileURL: fileURL), baseURL: fileURL)
             watcher = FileWatcher(url: fileURL) { [weak self] in self?.reload() }
+            foldingObserver = NotificationCenter.default.addObserver(forName: Folding.notification, object: nil, queue: .main) { [weak self] note in
+                guard let action = note.object as? Folding.Action, let webView = self?.webView, webView.window?.isKeyWindow == true else { return }
+                webView.evaluateJavaScript(action.rawValue)
+            }
         }
 
         private func reload() {
             let body = MarkdownRenderer.shared.renderBody(fileURL: fileURL)
             guard let json = try? JSONEncoder().encode(body), let literal = String(data: json, encoding: .utf8) else { return }
-            webView?.evaluateJavaScript("document.getElementById('content').innerHTML = \(literal)")
+            webView?.evaluateJavaScript("document.getElementById('content').innerHTML = \(literal); refreshFolds()")
         }
 
         /// Focus the page so arrow keys / space / End scroll right away.
