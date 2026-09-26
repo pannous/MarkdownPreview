@@ -9,7 +9,6 @@ enum Zoom {
     private static let zoomInKeys: Set<String> = ["=", "+"]
     private static let zoomOutKeys: Set<String> = ["-", "_"]
     private static let resetKeys: Set<String> = ["0"]
-    private static let triggerModifiers: NSEvent.ModifierFlags = [.command, .control]
 
     enum Action { case zoomIn, zoomOut, reset }
 
@@ -24,8 +23,7 @@ enum Zoom {
     }
 
     static func action(for event: NSEvent) -> Action? {
-        let modifiers = event.modifierFlags.intersection(.deviceIndependentFlagsMask).subtracting([.shift, .numericPad, .function])
-        guard modifiers == .command || modifiers == .control, let key = event.charactersIgnoringModifiers else { return nil }
+        guard let key = event.commandOrControlKey else { return nil }
         if zoomInKeys.contains(key) { return .zoomIn }
         if zoomOutKeys.contains(key) { return .zoomOut }
         if resetKeys.contains(key) { return .reset }
