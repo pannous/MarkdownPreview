@@ -7,6 +7,15 @@
   const headingLevel = element => (/^H([1-6])$/.exec(element.tagName) || [])[1] | 0;
   const foldKey = heading => heading.id || heading.textContent;
   const isCollapsed = heading => collapsedKeys.has(foldKey(heading));
+  const headings = () => [...content().children].filter(headingLevel);
+  const tableOfContents = document.createElement('details');
+  tableOfContents.id = 'table-of-contents';
+  const summary = document.createElement('summary');
+  summary.textContent = 'Contents';
+  const navigation = document.createElement('nav');
+  navigation.setAttribute('aria-label', 'Table of contents');
+  tableOfContents.append(summary, navigation);
+  document.body.appendChild(tableOfContents);
 
   const style = document.createElement('style');
   style.textContent = `
@@ -32,10 +41,41 @@
         openHeadings.push(element);
       }
     }
+    refreshTableOfContents();
   }
 
-  const headings = () => [...content().children].filter(headingLevel);
   const visibleFoldable = () => headings().filter(h => h.classList.contains('foldable') && !h.classList.contains('folded-away'));
+
+  function revealHeading(target) {
+    const ancestors = [];
+    for (const heading of headings()) {
+      while (ancestors.length && headingLevel(ancestors.at(-1)) >= headingLevel(heading)) ancestors.pop();
+      ancestors.push(heading);
+      if (heading === target) break;
+    }
+    ancestors.forEach(heading => setCollapsed(heading, false));
+    refreshFolds();
+    target.setAttribute('tabindex', '-1');
+    target.focus({ preventScroll: true });
+    target.scrollIntoView({ block: 'start' });
+  }
+
+  function refreshTableOfContents() {
+    const documentHeadings = headings();
+    const firstLevel = Math.min(...documentHeadings.map(headingLevel));
+    tableOfContents.hidden = !documentHeadings.length;
+    navigation.replaceChildren(...documentHeadings.map(heading => {
+      const link = document.createElement('a');
+      link.textContent = heading.textContent;
+      link.href = `#${encodeURIComponent(heading.id)}`;
+      link.style.setProperty('--heading-depth', headingLevel(heading) - firstLevel);
+      link.addEventListener('click', event => {
+        event.preventDefault();
+        revealHeading(heading);
+      });
+      return link;
+    }));
+  }
 
   function setCollapsed(heading, collapsed) {
     collapsed ? collapsedKeys.add(foldKey(heading)) : collapsedKeys.delete(foldKey(heading));

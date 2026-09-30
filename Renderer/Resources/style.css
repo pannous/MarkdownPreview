@@ -38,3 +38,17 @@ th, td { padding: 6px 13px; border: 1px solid var(--border); }
 th { font-weight: 600; background: var(--subtle); }
 tr:nth-child(2n) td { background: var(--row); }
 kbd { padding: 2px 5px; font-size: 0.8em; border: 1px solid var(--border); border-radius: 6px; background: var(--subtle); }
+
+#table-of-contents {
+  position: fixed; top: 12px; right: 112px; z-index: 10; margin: 0;
+  max-width: calc(100vw - 144px); border: 1px solid var(--border); border-radius: 8px;
+  background: var(--background); box-shadow: 0 4px 16px #0002; font-size: 13px;
+}
+#table-of-contents[open] { width: 280px; }
+#table-of-contents summary { padding: 5px 12px; cursor: pointer; font-weight: 600; }
+#table-of-contents nav { max-height: calc(100vh - 100px); overflow: auto; padding: 4px 0 8px; border-top: 1px solid var(--border); }
+#table-of-contents a { display: block; padding: 5px 12px 5px calc(12px + var(--heading-depth) * 12px); overflow-wrap: anywhere; }
+#table-of-contents a:hover { background: var(--subtle); }
+#table-of-contents :focus-visible { outline: 2px solid var(--link); outline-offset: -2px; }
+#content > :is(h1, h2, h3, h4, h5, h6) { scroll-margin-top: 56px; }
+@media print { #table-of-contents { display: none; } }

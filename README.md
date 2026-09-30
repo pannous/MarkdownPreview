@@ -10,6 +10,7 @@ Native macOS Markdown viewer plus a Quick Look extension, both backed by one ren
 - `open -a MarkdownPreview file.md` on an already open file focuses its window.
 - Zoom with ⌘ or ⌃ and `+`/`=` / `-`/`_` (Shift optional), reset with ⌘0; shared by all windows and remembered.
 - Collapse sections level by level with ⌘[ or ⌃[ (deepest open level first), expand with ⌘] or ⌃]; click a heading to fold just it. Folds survive live reload.
+- Collapsible **Contents** panel in the upper-right corner beside Edit: jump to any heading, revealing folded sections automatically. Updates on live reload.
 - Floating **Edit** button (⌘E) opens the file in Sublime Text (falls back to VS Code, then TextEdit;
   override with `defaults write com.pannous.MarkdownPreview editorBundleIdentifier <bundle id>`).
 - Finder space bar and Spotlight show the same rendering through the embedded Quick Look extension.
@@ -21,6 +22,8 @@ Native macOS Markdown viewer plus a Quick Look extension, both backed by one ren
 ```sh
 ./install.sh   # xcodegen + xcodebuild, installs ~/Applications/MarkdownPreview.app, registers app and extension
 probes/test.sh      # headless checks: renderer output, extension registration
+xcrun swiftc -parse-as-library probes/table_of_contents.swift -F build/Build/Products/Release -Xlinker -rpath -Xlinker "$PWD/build/Build/Products/Release" -o probes/table_of_contents
+probes/table_of_contents # offscreen Contents navigation and live-reload checks
 UI=1 probes/test.sh # plus window checks (brings windows to front); writes probes/quicklook.png, probes/app_window.png
 ```
 
