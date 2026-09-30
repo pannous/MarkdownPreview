@@ -1,3 +1,4 @@
+<:uniscript version="https://uniscript.org/v1">
 <:alpha> <:beta> <:gamma>: this file starts with the uniscript marker, so MarkdownPreview converts uniscript in its prose.
 
 # Uniscript in <:fracture M>arkdown
@@ -10,7 +11,7 @@ Neither <:nosuchthing> nor \:nosuchthing is an entity.
 
 No Greek c: <:greek c>, red cannot color <:red 𓀀>, no beside group of <:beside a b>.
 
-## Code is left alone
+## Code is left alone, except wasp and warp
 
 Inline `<:alpha> \:infinity` stays as written, and so do code blocks:
 
@@ -19,6 +20,12 @@ Inline `<:alpha> \:infinity` stays as written, and so do code blocks:
 ```
 
     <:beta> in an indented block
+
+Except in wasp and warp, where uniscript is part of the language:
+
+```wasp
+circle := <:pi> * r<:upper 2>  // \:infinity <:nosuchthing> <:greek c>
+```
 
 ## Wiki examples
 

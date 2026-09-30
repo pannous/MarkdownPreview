@@ -41,16 +41,23 @@ for fragment in '<p>α β γ: this file' 'Uniscript in 𝔐arkdown</h1>' '→ �
   '<code>&lt;:alpha&gt; \:infinity</code>' '<code class="hljs language-">&lt;:alpha&gt; \:infinity &lt;:fracture A&gt;' '&lt;:beta&gt; in an indented block'; do
   check "uniscript: renderer emits $fragment" grep -qF "$fragment" <<<"$uniscript_html"
 done
+check "uniscript in wasp code blocks" grep -qF '<code class="hljs language-wasp">circle := π * r² ' <<<"$uniscript_html"
+check "uniscript marks in wasp code blocks" grep -qF '∞ <span class="uniscript-error" title="unknown uniscript entity: nosuchthing">&lt;:nosuchthing&gt;</span> <span class="uniscript-warning" title="no greek form of c">c</span>' <<<"$uniscript_html"
+check "uniscript in warp code blocks of any file" grep -qF '<code class="hljs language-warp">α + β' <(./render_cli "$PROBES/uniscript/plain.md")
+check "uniscript header hidden" bash -c "! grep -q 'uniscript version' <<<\"\$0\"" "$uniscript_html"
+check "higher uniscript versions read without warning" grep -qF '<p>α under a version' <(./render_cli "$PROBES/uniscript/other_version.md")
+check "foreign uniscript version warned" grep -qF '<span class="uniscript-warning" title="unsupported uniscript version https://example.com/other">' <(./render_cli "$PROBES/uniscript/foreign_version.md")
+check "uniscript on after a foreign header" grep -qF 'α under a version' <(./render_cli "$PROBES/uniscript/foreign_version.md")
 check "uniscript only in files starting with <:" grep -qF 'so &lt;:alpha&gt; and &lt;:fracture A&gt; are shown' <(./render_cli "$PROBES/uniscript/plain.md")
 
-xcrun swiftc -parse-as-library "$PROBES/../App/Zoom.swift" "$PROBES/../App/KeyShortcut.swift" "$PROBES/zoom_keys.swift" -o "$PROBES/zoom_keys" 2>/dev/null
-check "zoom shortcuts (⌘/⌃ with =/+/-/_/0)" "$PROBES/zoom_keys"
-xcrun swiftc -parse-as-library "$PROBES/../App/Folding.swift" "$PROBES/../App/KeyShortcut.swift" "$PROBES/fold_sections.swift" -o "$PROBES/fold_sections" 2>/dev/null
 wiki_html="$(./render_cli "$PROBES/wiki_links/links.md")"
 for fragment in 'is <a href="docs/uniscript.md">docs/uniscript.md</a>.' '<a href="notes.md">notes</a>' '<a href="other%20page.md">the other page</a>' '<a href="guide.md#setup">guide#setup</a>' '<code>[[docs/uniscript.md]]</code>'; do
   check "wiki links: renderer emits $fragment" grep -qF "$fragment" <<<"$wiki_html"
 done
 
+xcrun swiftc -parse-as-library "$PROBES/../App/Zoom.swift" "$PROBES/../App/KeyShortcut.swift" "$PROBES/zoom_keys.swift" -o "$PROBES/zoom_keys" 2>/dev/null
+check "zoom shortcuts (⌘/⌃ with =/+/-/_/0)" "$PROBES/zoom_keys"
+xcrun swiftc -parse-as-library "$PROBES/../App/Folding.swift" "$PROBES/../App/KeyShortcut.swift" "$PROBES/fold_sections.swift" -o "$PROBES/fold_sections" 2>/dev/null
 check "section folding (⌘/⌃ [ ], click, survives reload) in an offscreen WKWebView" "$PROBES/fold_sections"
 
 check "Quick Look extension enabled" bash -c "pluginkit -m -v -i $EXTENSION_ID | grep -q '^+'"
