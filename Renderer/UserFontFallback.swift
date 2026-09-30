@@ -114,6 +114,7 @@ public final class UserFontSchemeHandler: NSObject, WKURLSchemeHandler {
             NSLog("UserFontSchemeHandler: cannot read %@", task.request.url?.absoluteString ?? "?")
             return task.didFailWithError(URLError(.fileDoesNotExist))
         }
+        NSLog("UserFontSchemeHandler: serving %@ (%d bytes)", file.path, data.count)
         let headers = ["Content-Type": "application/octet-stream", "Access-Control-Allow-Origin": "*"]
         task.didReceive(HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: headers)!)
         task.didReceive(data)

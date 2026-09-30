@@ -21,6 +21,11 @@ xcodebuild -project "$APP_NAME.xcodeproj" -scheme "$APP_NAME" -configuration Rel
 
 BUILT_APP="$BUILD_DIR/Build/Products/Release/$APP_NAME.app"
 INSTALLED_APP="$INSTALL_DIR/$APP_NAME.app"
+# Xcode copies the Uniscript resource bundle into both the app and the appex and can re-sign a copy after the appex was
+# sealed ("a sealed resource is missing or invalid"): reseal inside-out, keeping identifiers and entitlements
+for bundle in "$BUILT_APP/Contents/PlugIns/MarkdownQuickLook.appex" "$BUILT_APP"; do
+  codesign --force --sign "$SIGN_IDENTITY" --preserve-metadata=identifier,entitlements,flags "$bundle" 2>/dev/null
+done
 codesign --verify --deep --strict "$BUILT_APP"
 
 osascript -e "quit app \"$APP_NAME\"" 2>/dev/null || true

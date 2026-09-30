@@ -32,11 +32,11 @@ loads_no_remote_assets() { ! grep -qE '<(script|link)[^>]+(src|href)="http' <<<"
 check "renderer loads no remote scripts/styles" loads_no_remote_assets
 
 uniscript_html="$(./render_cli "$PROBES/uniscript/sample.md")"
-for fragment in '<p>α β γ: this file' 'Uniscript in 𝔐arkdown</h1>' '→ ∞</li>' '→ 𝔄𝔟𝔠</li>' '→ αβγδ</li>' '→ αθοσ ηΩλ</li>' '→ 🔴 🤎</li>' \
+for fragment in '<p>α β γ: this file' 'Uniscript in 𝔐arkdown</h1>' '→ ∞</li>' '→ 𝔄𝔟𝔠</li>' '→  α β γ δ </li>' '→  αθοσ  ηΩλ</li>' '→ 🔴 🤎</li>' \
   $'→ A\xf3\xa0\x81\xb2\xf3\xa0\x81\x8d</li>' '→ ∀ x ∈ ℝ</li>' '→ 𓀀𓐰𓁐 ⿰犭句</li>' '→ a literal &lt;: marker' '<strong>Bold α</strong>' '<td>ℝ</td>' \
   '<span class="uniscript-error" title="unknown uniscript entity: nosuchthing">&lt;:nosuchthing&gt;</span>' \
   '<span class="uniscript-error" title="unknown uniscript entity: nosuchthing">\:nosuchthing</span>' \
-  '<span class="uniscript-warning" title="no greek form of c">c</span>' '<span class="uniscript-warning" title="red does not apply to 𓀀">𓀀</span>' \
+  '<span class="uniscript-warning" title="no greek form of c">c</span>' '<span class="uniscript-warning" title="red on 𓀀 kept as color meta"><span style="color: red">𓀀</span></span>' \
   '<span class="uniscript-warning" title="no beside group of a">ab</span>' \
   '<code>&lt;:alpha&gt; \:infinity</code>' '<code class="hljs language-">&lt;:alpha&gt; \:infinity &lt;:fracture A&gt;' '&lt;:beta&gt; in an indented block'; do
   check "uniscript: renderer emits $fragment" grep -qF "$fragment" <<<"$uniscript_html"

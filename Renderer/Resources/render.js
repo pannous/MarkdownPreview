@@ -37,7 +37,7 @@ let uniscriptEnabled = false;
 // One tag, or a whole block `<:greek> a b <:/greek>`: an opener converts to nothing and runs to its closer
 function uniscriptElement(src) {
   const tag = uniscriptTag.exec(src)[0];
-  if (!uniscriptBlockOpener.test(tag) || convertUniscript(tag).text !== '') return tag;
+  if (!uniscriptBlockOpener.test(tag) || convertUniscript(tag).html !== '') return tag;
   const closer = uniscriptBlockCloser.exec(src.slice(tag.length));
   return closer ? src.slice(0, tag.length + closer.index + closer[0].length) : src;
 }
