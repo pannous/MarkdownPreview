@@ -9,3 +9,4 @@ TODO: ~/.swiftly swift 6.0.3 is first in PATH and cannot import Foundation with 
 - Quick Look font attachments (cid:) only verifiable with UI=1: qlmanage -o crashes
 - hieroglyph groups render small (NewGardinerOmni scales a quadrat into one em); maybe size-adjust on the Sequence Hieroglyphs face
 - TAG suffix effects (<:red A>) need Uniscript Sans to draw the base letter; not in the sequence fonts because a Latin range would restyle all text
+- UserFontSchemeHandler logs every served font (trace while the app's font loading is unconfirmed); drop the success NSLog once confirmed
