@@ -14,6 +14,8 @@ DEVELOPMENT_TEAM="${DEVELOPMENT_TEAM:-$(awk '/DEVELOPMENT_TEAM:/ {print $2}' "$P
 
 cd "$PROJECT_DIR"
 xcodegen generate --quiet
+# uniscript is followed on its main branch: drop both generated pins so every build resolves its latest commit
+rm -f "$APP_NAME.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved" "$BUILD_DIR/SourcePackages/workspace-state.json"
 xcodebuild -project "$APP_NAME.xcodeproj" -scheme "$APP_NAME" -configuration Release \
   -derivedDataPath "$BUILD_DIR" CODE_SIGN_IDENTITY="$SIGN_IDENTITY" DEVELOPMENT_TEAM="$DEVELOPMENT_TEAM" -quiet build
 

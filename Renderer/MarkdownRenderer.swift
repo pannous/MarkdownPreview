@@ -31,7 +31,10 @@ public final class MarkdownRenderer {
         let resolveImage: @convention(block) (String) -> String = { [unowned self] source in self.inlineImage(source) }
         context.setObject(resolveImage, forKeyedSubscript: "resolveImage" as NSString)
         let convertUniscript: @convention(block) (String) -> [String: String] = { source in
-            do { return ["text": try Uniscript.toUnicode(source)] } catch { return ["error": "\(error)"] }
+            do {
+                let (text, warnings) = try Uniscript.convert(source)
+                return warnings.isEmpty ? ["text": text] : ["text": text, "warning": warnings.map(\.message).joined(separator: "\n")]
+            } catch { return ["error": "\(error)"] }
         }
         context.setObject(convertUniscript, forKeyedSubscript: "convertUniscript" as NSString)
         for name in Self.scriptNames { context.evaluateScript(resource(name, "js")) }

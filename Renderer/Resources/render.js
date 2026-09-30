@@ -39,6 +39,8 @@ function uniscriptElement(src) {
   return closer ? src.slice(0, tag.length + closer.index + closer[0].length) : src;
 }
 
+const uniscriptMarked = (className, message, text) => `<span class="${className}" title="${escapeHtml(message)}">${escapeHtml(text)}</span>`;
+
 const uniscriptExtension = {
   name: 'uniscript',
   level: 'inline',
@@ -48,9 +50,10 @@ const uniscriptExtension = {
     const raw = uniscriptElement(src);
     return { type: 'uniscript', raw, converted: convertUniscript(raw) };
   },
-  // an unknown entity stays visible, marked, with the error as tooltip
-  renderer: ({ raw, converted }) => converted.error === undefined ? escapeHtml(converted.text)
-    : `<span class="uniscript-error" title="${escapeHtml(converted.error)}">${escapeHtml(raw)}</span>`,
+  // an unknown entity stays visible as written, an unsupported character plain; both marked, the message as tooltip
+  renderer: ({ raw, converted: { text, error, warning } }) =>
+    error !== undefined ? uniscriptMarked('uniscript-error', error, raw)
+      : warning !== undefined ? uniscriptMarked('uniscript-warning', warning, text) : escapeHtml(text),
 };
 marked.use({ extensions: [uniscriptExtension] });
 

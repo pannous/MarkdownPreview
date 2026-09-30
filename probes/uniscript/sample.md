@@ -6,6 +6,10 @@
 
 Neither <:nosuchthing> nor \:nosuchthing is an entity.
 
+## Unsupported characters are kept and marked
+
+No Greek c: <:greek c>, red cannot color <:red 𓀀>, no beside group of <:beside a b>.
+
 ## Code is left alone
 
 Inline `<:alpha> \:infinity` stays as written, and so do code blocks:
@@ -22,7 +26,8 @@ Inline `<:alpha> \:infinity` stays as written, and so do code blocks:
 - `<:fracture A>` → <:fracture A>
 - `<:fracture A b c >` → <:fracture A b c >
 - `<:fracture> A b c <:>` → <:fracture> A b c <:>
-- `<:greek> a b c <:/greek>` → <:greek> a b c <:/greek>
+- `<:greek> a b g d <:/greek>` → <:greek> a b g d <:/greek>
+- `<:greek> athos <:/greek> <:greek eta Omega lambda>` → <:greek> athos <:/greek> <:greek eta Omega lambda>
 - `x<:upper a> X<:upper A>` → x<:upper a> X<:upper A>
 - `<:ligature ae>` → <:ligature ae>
 - `<:red circle> <:brown heart>` → <:red circle> <:brown heart>
