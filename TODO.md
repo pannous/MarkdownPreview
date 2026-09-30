@@ -7,6 +7,6 @@ TODO: ~/.swiftly swift 6.0.3 is first in PATH and cannot import Foundation with 
 - sample probes '→ αβγδ' and '→ αθοσ ηΩλ' fail since uniscript 822678c keeps spaces next to a word inside a block (now 'α β γ δ'); the expected strings need updating (user's tests, not changed)
 - sample probe '<span class="uniscript-warning" title="red does not apply to 𓀀">𓀀</span>' fails since the uniscript libraries keep an unsupported color as color meta ('red on 𓀀 kept as color meta'); expected string needs updating (user's test, not changed)
 - Quick Look font attachments (cid:) only verifiable with UI=1: qlmanage -o crashes
-- hieroglyph groups render small (NewGardinerOmni scales a quadrat into one em); maybe size-adjust on the Sequence Hieroglyphs face
+- DONE hieroglyph groups render small (NewGardinerOmni scales a quadrat into one em); maybe size-adjust on the Sequence Hieroglyphs face
 - TAG suffix effects (<:red A>) need Uniscript Sans to draw the base letter; not in the sequence fonts because a Latin range would restyle all text
-- UserFontSchemeHandler logs every served font (trace while the app's font loading is unconfirmed); drop the success NSLog once confirmed
+- DONE UserFontSchemeHandler logs every served font (trace while the app's font loading is unconfirmed); drop the success NSLog once confirmed

@@ -17,14 +17,17 @@ enum UserFontFallback {
         let postScriptName: String
         let triggers: [ClosedRange<UInt32>]
         let unicodeRange: String
+        var sizeAdjust: String? = nil
     }
 
     static let scheme = "userfont"
+    /// NewGardinerOmni fits a whole quadrat into one em, so a stacked group looks cramped next to Latin text
+    private static let hieroglyphScale = "155%"
     private static let baseFont = CTFontCreateUIFontForLanguage(.system, 16, nil)!
     private static let systemFontsPrefix = "/System/"
     private static let sequenceFonts = [
         SequenceFont(alias: "Sequence Hieroglyphs", postScriptName: "NewGardinerOmni-Regular",
-                     triggers: [0x13430...0x1345F], unicodeRange: "U+13000-143FF"),
+                     triggers: [0x13430...0x1345F], unicodeRange: "U+13000-143FF", sizeAdjust: hieroglyphScale),
         SequenceFont(alias: "Sequence Ideographs", postScriptName: "UniscriptCJK-Regular",
                      triggers: [0x2FF0...0x2FFF, 0x31EF...0x31EF], unicodeRange: "U+2E80-2FFF, U+3000-9FFF, U+F900-FAFF, U+20000-3FFFF"),
     ]
@@ -80,9 +83,10 @@ enum UserFontFallback {
         "\"\(text.replacingOccurrences(of: "\\", with: "\\\\").replacingOccurrences(of: "\"", with: "\\\""))\""
     }
 
-    private static func fontFace(_ family: String, _ file: URL, unicodeRange: String? = nil) -> String {
+    private static func fontFace(_ family: String, _ file: URL, unicodeRange: String? = nil, sizeAdjust: String? = nil) -> String {
         let source = "\(scheme)://\(file.path.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? file.path)"
-        return "@font-face { font-family: \(cssString(family)); src: url(\"\(source)\");\(unicodeRange.map { " unicode-range: \($0);" } ?? "") }"
+        let descriptors = [unicodeRange.map { "unicode-range: \($0);" }, sizeAdjust.map { "size-adjust: \($0);" }].compactMap { $0 }
+        return "@font-face { font-family: \(cssString(family)); src: url(\"\(source)\"); \(descriptors.joined(separator: " ")) }"
     }
 
     /// `<style>` with the `@font-face` rules and the `--sequence-fonts` / `--fallback-fonts` variables that style.css puts
@@ -92,7 +96,7 @@ enum UserFontFallback {
         let fallback = fallbackFonts(for: scalars)
         let sequence = neededSequenceFonts(for: scalars)
         guard !fallback.isEmpty || !sequence.isEmpty else { return "" }
-        let faces = sequence.map { fontFace($0.font.alias, $0.file, unicodeRange: $0.font.unicodeRange) } + fallback.map { fontFace($0.family, $0.file) }
+        let faces = sequence.map { fontFace($0.font.alias, $0.file, unicodeRange: $0.font.unicodeRange, sizeAdjust: $0.font.sizeAdjust) } + fallback.map { fontFace($0.family, $0.file) }
         var variables: [String] = []
         if !sequence.isEmpty { variables.append("--sequence-fonts: \(sequence.map { cssString($0.font.alias) }.joined(separator: ", ")),;") }
         if !fallback.isEmpty { variables.append("--fallback-fonts: \(fallback.map { cssString($0.family) }.joined(separator: ", "));") }
@@ -114,7 +118,6 @@ public final class UserFontSchemeHandler: NSObject, WKURLSchemeHandler {
             NSLog("UserFontSchemeHandler: cannot read %@", task.request.url?.absoluteString ?? "?")
             return task.didFailWithError(URLError(.fileDoesNotExist))
         }
-        NSLog("UserFontSchemeHandler: serving %@ (%d bytes)", file.path, data.count)
         let headers = ["Content-Type": "application/octet-stream", "Access-Control-Allow-Origin": "*"]
         task.didReceive(HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: headers)!)
         task.didReceive(data)

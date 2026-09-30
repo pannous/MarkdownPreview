@@ -60,6 +60,7 @@ xcrun swiftc -O -parse-as-library "$PROBES/sequence_shaping.swift" -o "$PROBES/s
 ./render_cli "$PROBES/uniscript/groups.md" > "$PROBES/uniscript/groups.html"
 shaping="$("$PROBES/sequence_shaping" "$PROBES/uniscript/groups.html" "$PROBES/uniscript/groups.png")"
 composes() { awk -v text="$1" '$2 == text && $1 < 1.6 { found = 1 } END { exit !found }' <<<"$shaping"; }
+check "hieroglyphs enlarged" grep -qF 'unicode-range: U+13000-143FF; size-adjust: 155%;' "$PROBES/uniscript/groups.html"
 check "hieroglyph group composes in WebKit" composes '𓀀𓐰𓁐'
 check "ideographic description composes in WebKit" composes '⿰犭句'
 check "brackets keep the text font" grep -qF '16.02 Brackets' <<<"$shaping"
