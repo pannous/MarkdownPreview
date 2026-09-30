@@ -46,6 +46,11 @@ check "uniscript only in files starting with <:" grep -qF 'so &lt;:alpha&gt; and
 xcrun swiftc -parse-as-library "$PROBES/../App/Zoom.swift" "$PROBES/../App/KeyShortcut.swift" "$PROBES/zoom_keys.swift" -o "$PROBES/zoom_keys" 2>/dev/null
 check "zoom shortcuts (⌘/⌃ with =/+/-/_/0)" "$PROBES/zoom_keys"
 xcrun swiftc -parse-as-library "$PROBES/../App/Folding.swift" "$PROBES/../App/KeyShortcut.swift" "$PROBES/fold_sections.swift" -o "$PROBES/fold_sections" 2>/dev/null
+wiki_html="$(./render_cli "$PROBES/wiki_links/links.md")"
+for fragment in 'is <a href="docs/uniscript.md">docs/uniscript.md</a>.' '<a href="notes.md">notes</a>' '<a href="other%20page.md">the other page</a>' '<a href="guide.md#setup">guide#setup</a>' '<code>[[docs/uniscript.md]]</code>'; do
+  check "wiki links: renderer emits $fragment" grep -qF "$fragment" <<<"$wiki_html"
+done
+
 check "section folding (⌘/⌃ [ ], click, survives reload) in an offscreen WKWebView" "$PROBES/fold_sections"
 
 check "Quick Look extension enabled" bash -c "pluginkit -m -v -i $EXTENSION_ID | grep -q '^+'"

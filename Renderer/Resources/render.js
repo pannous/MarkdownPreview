@@ -64,3 +64,19 @@ function renderMarkdown(source) {
   uniscriptEnabled = source.startsWith(uniscriptMarker);
   return inlineImageSources(marked.parse(source));
 }
+// [[page]], [[dir/page.md]], [[page#heading]], [[page|label]]: a relative link, ".md" implied when the page has no extension
+const wikiLink = /^\[\[([^\]|#]+)(#[^\]|]*)?(?:\|([^\]]+))?\]\]/;
+const withMarkdownExtension = page => /\.[A-Za-z0-9]+$/.test(page) ? page : `${page}.md`;
+marked.use({ extensions: [{
+  name: 'wikiLink',
+  level: 'inline',
+  start: src => src.indexOf('[['),
+  tokenizer(src) {
+    const match = wikiLink.exec(src);
+    if (!match) return;
+    const [raw, page, heading = '', label] = match;
+    return { type: 'wikiLink', raw, href: encodeURI(withMarkdownExtension(page.trim())) + heading, text: label ?? page + heading };
+  },
+  renderer: ({ href, text }) => `<a href="${escapeHtml(href)}">${escapeHtml(text.trim())}</a>`,
+}] });
+
