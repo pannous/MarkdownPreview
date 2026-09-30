@@ -13,6 +13,9 @@ Native macOS Markdown viewer plus a Quick Look extension, both backed by one ren
 - Collapsible **Contents** panel at the right edge below Edit: jump to any heading, revealing folded sections automatically. Escape closes the panel. Updates on live reload.
 - Floating **Edit** button (⌘E) opens the file in Sublime Text (falls back to VS Code, then TextEdit;
   override with `defaults write com.pannous.MarkdownPreview editorBundleIdentifier <bundle id>`).
+- **Uniscript** in files that start with `<:`: `<:alpha> <:fracture A> \:infinity` shows as α 𝔄 ∞ (prose only, never in code spans or blocks);
+  an unknown entity stays visible with a red wavy underline and the error as tooltip. Converter: the Swift package of
+  [pannous/uniscript](https://github.com/pannous/uniscript). Samples: `probes/uniscript/`.
 - Finder space bar and Spotlight show the same rendering through the embedded Quick Look extension.
 
 ![MarkdownPreview window](probes/app_window.png)

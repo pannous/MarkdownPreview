@@ -1,5 +1,6 @@
 import Foundation
 import JavaScriptCore
+import Uniscript
 import UniformTypeIdentifiers
 
 /// Renders GitHub-flavoured Markdown to self-contained HTML (styles inlined, local images as data URIs),
@@ -29,6 +30,10 @@ public final class MarkdownRenderer {
         context.exceptionHandler = { _, exception in NSLog("MarkdownRenderer JS error: %@", exception?.toString() ?? "?") }
         let resolveImage: @convention(block) (String) -> String = { [unowned self] source in self.inlineImage(source) }
         context.setObject(resolveImage, forKeyedSubscript: "resolveImage" as NSString)
+        let convertUniscript: @convention(block) (String) -> [String: String] = { source in
+            do { return ["text": try Uniscript.toUnicode(source)] } catch { return ["error": "\(error)"] }
+        }
+        context.setObject(convertUniscript, forKeyedSubscript: "convertUniscript" as NSString)
         for name in Self.scriptNames { context.evaluateScript(resource(name, "js")) }
     }
 
@@ -37,7 +42,7 @@ public final class MarkdownRenderer {
         lock.lock(); defer { lock.unlock() }
         self.baseDirectory = baseDirectory
         let html = context.objectForKeyedSubscript("renderMarkdown").call(withArguments: [markdown]).toString() ?? ""
-        return UserFontFallback.styleElement(for: markdown) + html
+        return UserFontFallback.styleElement(for: html) + html // html, not markdown: uniscript adds characters
     }
 
     /// Body for a Markdown file on disk, with images relative to the file's folder.

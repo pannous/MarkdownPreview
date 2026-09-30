@@ -9,11 +9,13 @@ INSTALL_DIR="$HOME/Applications"
 BUILD_DIR="$PROJECT_DIR/build"
 LSREGISTER="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister"
 SIGN_IDENTITY="${SIGN_IDENTITY:-Apple Development}"
+# command line overrides reach every target, also the Uniscript package's resource bundle, which has no team of its own
+DEVELOPMENT_TEAM="${DEVELOPMENT_TEAM:-$(awk '/DEVELOPMENT_TEAM:/ {print $2}' "$PROJECT_DIR/project.yml")}"
 
 cd "$PROJECT_DIR"
 xcodegen generate --quiet
 xcodebuild -project "$APP_NAME.xcodeproj" -scheme "$APP_NAME" -configuration Release \
-  -derivedDataPath "$BUILD_DIR" CODE_SIGN_IDENTITY="$SIGN_IDENTITY" -quiet build
+  -derivedDataPath "$BUILD_DIR" CODE_SIGN_IDENTITY="$SIGN_IDENTITY" DEVELOPMENT_TEAM="$DEVELOPMENT_TEAM" -quiet build
 
 BUILT_APP="$BUILD_DIR/Build/Products/Release/$APP_NAME.app"
 INSTALLED_APP="$INSTALL_DIR/$APP_NAME.app"

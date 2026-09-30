@@ -19,6 +19,8 @@ capture_window() { screencapture -x -o -l "$("$PROBES/window_id" "$1" | head -1)
 cd "$PROBES"
 compile window_id
 compile render_cli -F "$FRAMEWORKS" -Xlinker -rpath -Xlinker "$FRAMEWORKS"
+# the app and the extension carry the Uniscript index bundle next to them; probe binaries linking the framework find it here
+ln -sfn "$FRAMEWORKS/Uniscript_Uniscript.bundle" "$PROBES/Uniscript_Uniscript.bundle"
 
 html="$(./render_cli "$SAMPLE")"
 for fragment in '<table>' '<th align="center">Tables</th>' 'class="hljs-keyword"' 'type="checkbox"' 'src="data:image/png;base64,' '<h2 id="table">' 'href="https://example.com"'; do
@@ -28,6 +30,16 @@ check "user-installed fonts named for rare glyphs" grep -qF -- '--fallback-fonts
 check "no fallback fonts when system fonts suffice" bash -c "! grep -q '<style>:root' <<<\"\$0\"" "$html"
 loads_no_remote_assets() { ! grep -qE '<(script|link)[^>]+(src|href)="http' <<<"$html"; }
 check "renderer loads no remote scripts/styles" loads_no_remote_assets
+
+uniscript_html="$(./render_cli "$PROBES/uniscript/sample.md")"
+for fragment in '<p>α β γ: this file' 'Uniscript in 𝔐arkdown</h1>' '→ ∞</li>' '→ 𝔄𝔟𝔠</li>' '→ αβψ</li>' '→ 🔴 🤎</li>' \
+  $'→ A\xf3\xa0\x81\xb2\xf3\xa0\x81\x8d</li>' '→ ∀ x ∈ ℝ</li>' '→ 𓀀𓐰𓁐 ⿰犭句</li>' '→ a literal &lt;: marker' '<strong>Bold α</strong>' '<td>ℝ</td>' \
+  '<span class="uniscript-error" title="unknown uniscript entity: nosuchthing">&lt;:nosuchthing&gt;</span>' \
+  '<span class="uniscript-error" title="unknown uniscript entity: nosuchthing">\:nosuchthing</span>' \
+  '<code>&lt;:alpha&gt; \:infinity</code>' '<code class="hljs language-">&lt;:alpha&gt; \:infinity &lt;:fracture A&gt;' '&lt;:beta&gt; in an indented block'; do
+  check "uniscript: renderer emits $fragment" grep -qF "$fragment" <<<"$uniscript_html"
+done
+check "uniscript only in files starting with <:" grep -qF 'so &lt;:alpha&gt; and &lt;:fracture A&gt; are shown' <(./render_cli "$PROBES/uniscript/plain.md")
 
 xcrun swiftc -parse-as-library "$PROBES/../App/Zoom.swift" "$PROBES/../App/KeyShortcut.swift" "$PROBES/zoom_keys.swift" -o "$PROBES/zoom_keys" 2>/dev/null
 check "zoom shortcuts (⌘/⌃ with =/+/-/_/0)" "$PROBES/zoom_keys"

@@ -22,9 +22,42 @@ marked.use({
   },
 });
 
+// Uniscript (<:alpha> → α, \:infinity → ∞) in prose of files that opt in by starting with the marker "<:".
+// Code spans and code blocks never reach inline extensions. convertUniscript is injected by Swift.
+const uniscriptMarker = '<:';
+const uniscriptElementStart = /<:|\\:/;
+const uniscriptTag = /^\\:[A-Za-z0-9_-]*|^<:[^>]*>|^<:/;
+const uniscriptBlockOpener = /^<:[^\/>][^>]*>$/;
+const uniscriptBlockCloser = /<:(\/[^>]*)?>/;
+let uniscriptEnabled = false;
+
+// One tag, or a whole block `<:greek> a b <:/greek>`: an opener converts to nothing and runs to its closer
+function uniscriptElement(src) {
+  const tag = uniscriptTag.exec(src)[0];
+  if (!uniscriptBlockOpener.test(tag) || convertUniscript(tag).text !== '') return tag;
+  const closer = uniscriptBlockCloser.exec(src.slice(tag.length));
+  return closer ? src.slice(0, tag.length + closer.index + closer[0].length) : src;
+}
+
+const uniscriptExtension = {
+  name: 'uniscript',
+  level: 'inline',
+  start: src => uniscriptEnabled ? src.match(uniscriptElementStart)?.index : undefined,
+  tokenizer(src) {
+    if (!uniscriptEnabled || !uniscriptTag.test(src)) return;
+    const raw = uniscriptElement(src);
+    return { type: 'uniscript', raw, converted: convertUniscript(raw) };
+  },
+  // an unknown entity stays visible, marked, with the error as tooltip
+  renderer: ({ raw, converted }) => converted.error === undefined ? escapeHtml(converted.text)
+    : `<span class="uniscript-error" title="${escapeHtml(converted.error)}">${escapeHtml(raw)}</span>`,
+};
+marked.use({ extensions: [uniscriptExtension] });
+
 const inlineImageSources = html =>
   html.replace(/(<img\b[^>]*?\bsrc=")([^"]*)(")/gi, (match, before, source, after) => before + resolveImage(source) + after);
 
 function renderMarkdown(source) {
+  uniscriptEnabled = source.startsWith(uniscriptMarker);
   return inlineImageSources(marked.parse(source));
 }

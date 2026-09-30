@@ -13,11 +13,17 @@ settings:
     DEVELOPMENT_TEAM: T7AR9Y9X4N
     ENABLE_HARDENED_RUNTIME: NO
     ENABLE_USER_SCRIPT_SANDBOXING: YES
+packages:
+  Uniscript:
+    url: https://github.com/pannous/uniscript
+    branch: main
 targets:
   MarkdownRenderer:
     type: framework
     platform: macOS
     sources: [Renderer]
+    dependencies:
+      - package: Uniscript
     settings:
       base:
         GENERATE_INFOPLIST_FILE: YES
