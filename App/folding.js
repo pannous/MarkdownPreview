@@ -93,6 +93,14 @@
   window.unfoldShallowest = () => foldLevel(Math.min, isCollapsed, false);
   window.refreshFolds = refreshFolds;
 
+  document.addEventListener('keydown', event => {
+    if (event.key !== 'Escape' || !tableOfContents.open) return;
+    const focusWasInside = tableOfContents.contains(document.activeElement);
+    tableOfContents.open = false;
+    if (focusWasInside) summary.focus({ preventScroll: true });
+    event.preventDefault();
+  });
+
   document.addEventListener('click', event => {
     const heading = event.target.closest('.foldable');
     if (!heading || event.target.closest('a')) return;
