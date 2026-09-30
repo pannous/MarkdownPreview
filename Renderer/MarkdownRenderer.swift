@@ -10,7 +10,6 @@ public final class MarkdownRenderer {
 
     private static let scriptNames = ["marked", "highlight", "render"]
     private static let remoteSchemes: Set<String> = ["http", "https", "data"]
-    private static let uniscriptVersionPattern = /https:\/\/uniscript\.org\/v[0-9]+/
 
     private let context = JSContext()!
     private let lock = NSLock()
@@ -58,9 +57,8 @@ public final class MarkdownRenderer {
         return (header, String(decoding: markdown.utf8.dropFirst(header.length), as: UTF8.self))
     }
 
-    /// Uniscript stays backwards compatible, so every uniscript.org version is read; only a foreign one warns
     private static func unsupportedVersionWarning(_ header: Header) -> String? {
-        header.version.isEmpty || header.version.wholeMatch(of: uniscriptVersionPattern) != nil ? nil : "unsupported uniscript version \(header.version)"
+        readsVersion(header.version) ? nil : "unsupported uniscript version \(header.version)"
     }
 
     /// Body for a Markdown file on disk, with images relative to the file's folder.
