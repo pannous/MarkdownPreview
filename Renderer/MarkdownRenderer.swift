@@ -34,7 +34,8 @@ public final class MarkdownRenderer {
         let convertUniscript: @convention(block) (String) -> [String: String] = { source in
             do {
                 let (text, warnings) = try Uniscript.convert(source)
-                return warnings.isEmpty ? ["text": text] : ["text": text, "warning": warnings.map(\.message).joined(separator: "\n")]
+                let html = Uniscript.standard.html(Uniscript.standard.metaRuns(text).0)
+                return warnings.isEmpty ? ["html": html] : ["html": html, "warning": warnings.map(\.message).joined(separator: "\n")]
             } catch { return ["error": "\(error)"] }
         }
         context.setObject(convertUniscript, forKeyedSubscript: "convertUniscript" as NSString)

@@ -42,13 +42,15 @@ function uniscriptElement(src) {
   return closer ? src.slice(0, tag.length + closer.index + closer[0].length) : src;
 }
 
-const uniscriptMarked = (className, message, text) => `<span class="${className}" title="${escapeHtml(message)}">${escapeHtml(text)}</span>`;
+const uniscriptMarkedHtml = (className, message, html) => `<span class="${className}" title="${escapeHtml(message)}">${html}</span>`;
+const uniscriptMarked = (className, message, text) => uniscriptMarkedHtml(className, message, escapeHtml(text));
 
-// an unknown entity stays visible as written, an unsupported character plain; both marked, the message as tooltip
+// an unknown entity stays visible as written, an unsupported character plain; both marked, the message as tooltip.
+// html carries meta (<:color red 𓀀>) as CSS spans
 function uniscriptElementHtml(raw) {
-  const { text, error, warning } = convertUniscript(raw);
+  const { html, error, warning } = convertUniscript(raw);
   return error !== undefined ? uniscriptMarked('uniscript-error', error, raw)
-    : warning !== undefined ? uniscriptMarked('uniscript-warning', warning, text) : escapeHtml(text);
+    : warning !== undefined ? uniscriptMarkedHtml('uniscript-warning', warning, html) : html;
 }
 
 // Every uniscript element of a plain text converted, the rest escaped
