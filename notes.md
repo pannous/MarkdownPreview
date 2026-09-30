@@ -1,3 +1,4 @@
 - Contents navigation can reuse the folding ancestor walk and reload hook; native `details` preserves its state while only its link list is replaced.
 - Offscreen WKWebView layout reserves scrollbar space, so fixed-position assertions should compare against `document.documentElement.clientWidth`.
 - Escape dismissal restores focus to the Contents summary only when focus was within the panel; document focus stays unchanged otherwise.
+- uniscript: marked inline extensions run before the escape rule, so \: survives; Xcode puts package resource bundles in the app/appex, not the framework linking the package
