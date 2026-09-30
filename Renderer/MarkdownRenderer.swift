@@ -87,6 +87,20 @@ public final class MarkdownRenderer {
         """
     }
 
+    /// The page with its `userfont:` URLs replaced by `cid:` names, and the font file of each name, for hosts that
+    /// cannot serve a URL scheme but take attachments (Quick Look)
+    public static func withFontAttachments(_ page: String) -> (page: String, attachments: [String: URL]) {
+        var attachments: [String: URL] = [:]
+        let pattern = /url\("(userfont:[^"]+)"\)/
+        let rewritten = page.replacing(pattern) { match in
+            guard let url = URL(string: String(match.1)), let file = UserFontFallback.file(for: url) else { return String(match.0) }
+            let name = "font\(attachments.count)"
+            attachments[name] = file
+            return "url(\"cid:\(name)\")"
+        }
+        return (rewritten, attachments)
+    }
+
     private func inlineImage(_ source: String) -> String {
         let decoded = source.replacingOccurrences(of: "&amp;", with: "&")
         if let scheme = URL(string: decoded)?.scheme?.lowercased(), Self.remoteSchemes.contains(scheme) { return source }

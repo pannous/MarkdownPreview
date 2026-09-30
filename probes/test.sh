@@ -56,6 +56,14 @@ for fragment in 'is <a href="docs/uniscript.md">docs/uniscript.md</a>.' '<a href
   check "wiki links: renderer emits $fragment" grep -qF "$fragment" <<<"$wiki_html"
 done
 
+xcrun swiftc -O -parse-as-library "$PROBES/sequence_shaping.swift" -o "$PROBES/sequence_shaping" -F "$FRAMEWORKS" -Xlinker -rpath -Xlinker "$FRAMEWORKS"
+./render_cli "$PROBES/uniscript/groups.md" > "$PROBES/uniscript/groups.html"
+shaping="$("$PROBES/sequence_shaping" "$PROBES/uniscript/groups.html" "$PROBES/uniscript/groups.png")"
+composes() { awk -v text="$1" '$2 == text && $1 < 1.6 { found = 1 } END { exit !found }' <<<"$shaping"; }
+check "hieroglyph group composes in WebKit" composes '𓀀𓐰𓁐'
+check "ideographic description composes in WebKit" composes '⿰犭句'
+check "brackets keep the text font" grep -qF '16.02 Brackets' <<<"$shaping"
+
 xcrun swiftc -parse-as-library "$PROBES/../App/Zoom.swift" "$PROBES/../App/KeyShortcut.swift" "$PROBES/zoom_keys.swift" -o "$PROBES/zoom_keys" 2>/dev/null
 check "zoom shortcuts (⌘/⌃ with =/+/-/_/0)" "$PROBES/zoom_keys"
 xcrun swiftc -parse-as-library "$PROBES/../App/Folding.swift" "$PROBES/../App/KeyShortcut.swift" "$PROBES/fold_sections.swift" -o "$PROBES/fold_sections" 2>/dev/null

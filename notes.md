@@ -3,3 +3,6 @@
 - Escape dismissal restores focus to the Contents summary only when focus was within the panel; document focus stays unchanged otherwise.
 - uniscript: marked inline extensions run before the escape rule, so \: survives; Xcode puts package resource bundles in the app/appex, not the framework linking the package
 - Wiki links [[page]] are a marked inline extension; relative hrefs reuse the app's existing .md link opening
+- macOS 27: WebKit no longer applies user-installed fonts named in CSS, and CTFontCreateWithName no longer finds them (returns Helvetica); CoreText's fallback still picks them. Fix: @font-face src userfont://<file> served by UserFontSchemeHandler (app) or as cid: attachments (Quick Look)
+- Uniscript sequences (hieroglyph groups with U+13430 joiners, ⿰犭句) need one font for the whole sequence; per-character fallback (CoreText and WebKit) splits them, so their fonts go first behind a unicode-range alias
+- Probe pitfall: evaluateJavaScript does not await promises; wait for document.fonts.ready with callAsyncJavaScript or the snapshot shows the font swap
