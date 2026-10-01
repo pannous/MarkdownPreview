@@ -38,6 +38,9 @@ enum TabKeysProbe {
         expect("mouse back button previous tab", mouse(3), .previous)
         expect("mouse forward button next tab", mouse(4), .next)
         expect("middle button ignored", mouse(2), nil)
+        let swipes = TabNavigation.step(forSwipe: 1) == .previous && TabNavigation.step(forSwipe: -1) == .next && TabNavigation.step(forSwipe: 0) == nil
+        print(swipes ? "ok  " : "FAIL", "swipe right previous tab, left next tab")
+        if !swipes { failures += 1 }
         exit(Int32(failures))
     }
 }
