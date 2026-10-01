@@ -2,11 +2,11 @@
 
 # Suggested simplifications
 就	jiù  ⿰讠尤  
-能	néng ⿱匕月
-⿱匕月 ⿱匕⺝   ⿱月匕 ⿱⺝匕
+能	néng ⿱匕月 ⿱匕月 ⿱匕⺝   ⿱月匕 ⿱⺝匕  
 得	dé ⿰彳寸  ≠ 付  
 
-# Characters up to 8 strokes are supported!
+# Complex
+Characters up to 8 strokes are supported!
 ⿰鱼电  
 
 # Neue Zeichen
