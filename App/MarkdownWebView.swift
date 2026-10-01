@@ -34,19 +34,36 @@ struct MarkdownWebView: NSViewRepresentable {
         private weak var webView: WKWebView?
         private var watcher: FileWatcher?
         private var foldingObserver: NSObjectProtocol?
+        private var visibilityObservers: [NSObjectProtocol] = []
 
         init(fileURL: URL) { self.fileURL = fileURL }
 
-        deinit { foldingObserver.map(NotificationCenter.default.removeObserver) }
+        deinit { ([foldingObserver].compactMap { $0 } + visibilityObservers).forEach(NotificationCenter.default.removeObserver) }
 
         func attach(_ webView: WKWebView) {
             self.webView = webView
-            webView.loadHTMLString(MarkdownRenderer.shared.renderPage(fileURL: fileURL), baseURL: fileURL)
-            watcher = FileWatcher(url: fileURL) { [weak self] in self?.reload() }
+            visibilityObservers = [NSWindow.didChangeOcclusionStateNotification, NSWindow.didBecomeKeyNotification].map { name in
+                NotificationCenter.default.addObserver(forName: name, object: nil, queue: .main) { [weak self] note in
+                    guard let self, note.object as? NSWindow === webView.window else { return }
+                    loadIfVisible()
+                }
+            }
+            DispatchQueue.main.async { [weak self] in self?.loadIfVisible() }
             foldingObserver = NotificationCenter.default.addObserver(forName: Folding.notification, object: nil, queue: .main) { [weak self] note in
                 guard let action = note.object as? Folding.Action, let webView = self?.webView, webView.window?.isKeyWindow == true else { return }
                 webView.evaluateJavaScript(action.rawValue)
             }
+        }
+
+        /// Restored tabs all build their web view at launch, each briefly a visible window of its own: only the selected
+        /// tab renders and starts a web process, the others when first selected
+        private func loadIfVisible() {
+            guard let webView, watcher == nil, let window = webView.window, window.isVisible,
+                  (window.tabGroup?.selectedWindow ?? window) === window else { return }
+            visibilityObservers.forEach(NotificationCenter.default.removeObserver)
+            visibilityObservers = []
+            webView.loadHTMLString(MarkdownRenderer.shared.renderPage(fileURL: fileURL), baseURL: fileURL)
+            watcher = FileWatcher(url: fileURL) { [weak self] in self?.reload() }
         }
 
         private func reload() {

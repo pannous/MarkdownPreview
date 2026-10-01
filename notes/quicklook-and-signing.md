@@ -51,3 +51,16 @@
 - Works unchanged in the sandboxed Quick Look extension (user fonts are visible there).
 - Probes: `probes/fonts/rare_glyphs.md`, `covering_fonts.swift` (families covering codepoints), `cascade_timing.swift`
   (CoreText's pick + timing); build them with `xcrun swiftc` (the swiftly swiftc breaks CoreText).
+
+## Startup time (2026-10-01)
+- Measure: `probes/startup_timing <file.md>` (offscreen stages), `/usr/bin/sample <pid>` during `open -g` (Homebrew's
+  `sample` Python script shadows the system tool), app stderr via `open -g --stderr <file>`.
+- Window restoration recreates every tab: 10 restored tabs meant 10 renders and 10 WebContent processes before the
+  window showed (1.8 s). Restored tab windows each report isVisible / occlusion .visible while restoring, so only
+  `tabGroup.selectedWindow === window` tells the shown tab; the others load on didBecomeKey. Now 1 process, ~1.1 s.
+- CoreText's fallback search (one CTLine over the document's distinct characters) costs 150–300 ms per render for
+  rare scripts (plane 15 private use, CJK ext G); results per character are cached in
+  ~/Library/Caches/com.pannous.MarkdownPreview/user-fonts.json (Renderer/FontCache.swift), invalidated by name, size and
+  date of the font files plus the macOS version.
+- Screenshots of a window launched with `open -g` and never shown stay blank (WebKit does not paint it), with or
+  without lazy loading: not a rendering failure.

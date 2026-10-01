@@ -19,6 +19,8 @@ Native macOS Markdown viewer plus a Quick Look extension, both backed by one ren
   an unknown entity stays visible with a red wavy underline, a character without a counterpart (`<:greek c>`) stays plain
   with an amber dotted underline; the message is the tooltip. Converter: the Swift package of
   [pannous/uniscript](https://github.com/pannous/uniscript). Samples: `probes/uniscript/`.
+- Fast startup: restored tabs render only when first selected; which installed font draws a rare character is cached in
+  `~/Library/Caches/com.pannous.MarkdownPreview/user-fonts.json` until fonts change (`probes/startup_timing file.md` shows the stages).
 - Finder space bar and Spotlight show the same rendering through the embedded Quick Look extension.
 
 ![MarkdownPreview window](probes/app_window.png)

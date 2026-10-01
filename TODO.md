@@ -15,3 +15,5 @@ TODO: probes/test.sh "user-installed fonts named for rare glyphs" fails (pre-exi
 DONE: Composed ideographic description sequences (⿰讠⿱人工) left a wide gap before double spaces and at the end of bold/italic: WebKit measured each ideograph alone as a line-break item; sequences now sit in a word-break: keep-all span.
 TODO: probes/test.sh expects '→ 𓀀𓐰𓁐 ⿰犭句</li>', now '→ 𓀀𓐰𓁐 <span class="description-sequence">⿰犭句</span></li>'; update the expected string once permitted (user's test).
 TODO: probes/test.sh composes() uses macOS awk, which compares multibyte strings wrongly ('𓀀𓐰𓁐' == '⿰犭句' is true), so "ideographic description composes in WebKit" passes on the hieroglyph line; and sequence_shaping's range width counts characters (3.00 even when composed). Both checks are false positives.
+DONE: Startup: restored tabs load lazily (only the selected tab renders and starts a web process); font fallback answers cached on disk.
+TODO: Lazy tab loading verified at launch (1 web process, selected tab loads); switching to a not-yet-loaded tab only reasoned (didBecomeKey), not exercised by a probe (needs UI).
