@@ -47,11 +47,11 @@ tōng:通:⿺辶同 chuò   ⿺辶  ⿺辶𠮛   NOPE
 jiāo:教:⿰讠攵 xiaò pū  
 tí:提:⿰扌日 shǒu shì  是  
 jiě:解: ⿱刀牛  daō niú  jiaǒ  
-zhēn:真:⿱十日 具 shí jù   <>早	zǎo
-tí:题:   ⿰讠是  ⿺是页 shì yè
+zhēn:真:⿱十日 具 shí jù   <>早	zǎo  
+tí:题:   ⿺辶页
 
-<:cn zao>
-<:chinese zao>
+<:cn zao>  
+<:chinese zao>  
 <:chinese ri>
 
 ér:而:⿱⿱一丿⿵冂⿰丨丨  yī piě jiōng shù gǔn shù gǔn  
