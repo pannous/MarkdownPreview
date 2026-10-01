@@ -1,11 +1,12 @@
 #!/bin/bash
-# Build MarkdownPreview.app (+ embedded Quick Look extension), install to ~/Applications and register it.
+# Build MarkdownPreview.app (+ embedded Quick Look extension), install to /Applications and register it.
 set -euo pipefail
 
 PROJECT_DIR="$(cd "$(dirname "$0")" && pwd)"
 APP_NAME="MarkdownPreview"
 EXTENSION_ID="com.pannous.MarkdownPreview.QuickLook"
-INSTALL_DIR="$HOME/Applications"
+INSTALL_DIR="/Applications"
+LEGACY_APP="$HOME/Applications/MarkdownPreview.app"  # where earlier versions were installed
 BUILD_DIR="$PROJECT_DIR/build"
 LSREGISTER="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister"
 SIGN_IDENTITY="${SIGN_IDENTITY:-Apple Development}"
@@ -35,6 +36,8 @@ ditto "$BUILT_APP" "$INSTALLED_APP"
 touch "$INSTALLED_APP"  # ditto keeps the build timestamp; a fresh one makes the Dock/app switcher drop cached icons
 
 "$LSREGISTER" -f -R -trusted "$INSTALLED_APP"
+# a copy left at the old location would be a second app Launch Services may start: unregister it, move it to the Trash
+if [ -d "$LEGACY_APP" ]; then "$LSREGISTER" -u "$LEGACY_APP"; mv "$LEGACY_APP" "$HOME/.Trash/MarkdownPreview-$(date +%s).app"; fi
 # xcodebuild registers the build copy too, and Launch Services may then start it as a second instance next to the installed one
 "$LSREGISTER" -u "$BUILT_APP"
 pluginkit -a "$INSTALLED_APP/Contents/PlugIns/MarkdownQuickLook.appex"

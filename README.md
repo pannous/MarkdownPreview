@@ -34,7 +34,7 @@ Native macOS Markdown viewer plus a Quick Look extension, both backed by one ren
 ## Build & install
 
 ```sh
-./install.sh   # xcodegen + xcodebuild, installs ~/Applications/MarkdownPreview.app, registers app and extension
+./install.sh   # xcodegen + xcodebuild, installs /Applications/MarkdownPreview.app, registers app and extension
 probes/test.sh      # headless checks: renderer output, extension registration
 xcrun swiftc -parse-as-library probes/table_of_contents.swift -F build/Build/Products/Release -Xlinker -rpath -Xlinker "$PWD/build/Build/Products/Release" -o probes/table_of_contents
 probes/table_of_contents # offscreen Contents navigation and live-reload checks

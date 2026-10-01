@@ -10,7 +10,7 @@ import Quartz
 windows = Quartz.CGWindowListCopyWindowInfo(Quartz.kCGWindowListOptionOnScreenOnly, Quartz.kCGNullWindowID)
 print(sum(1 for w in windows if w.get("kCGWindowOwnerName") == "MarkdownPreview" and w.get("kCGWindowLayer") == 0 and str(w.get("kCGWindowName", "")).endswith(".md")))'
 }
-open -g -a "$HOME/Applications/MarkdownPreview.app" "$PROBES/sample.md"; sleep 3
-open -g -a "$HOME/Applications/MarkdownPreview.app" "$PROBES/other.md"; sleep 3
+open -g -a "/Applications/MarkdownPreview.app" "$PROBES/sample.md"; sleep 3
+open -g -a "/Applications/MarkdownPreview.app" "$PROBES/other.md"; sleep 3
 count="$(visible_windows)"
 if [ "$count" = 1 ]; then echo "ok   one window, the files are tabs"; else echo "FAIL $count visible windows"; exit 1; fi

@@ -9,7 +9,7 @@ HANDED_FILE="$PROBES/uniscript/cn.md"
 
 instances() { ps -axo pid,command | grep '[M]arkdownPreview.app/Contents/MacOS/MarkdownPreview$' | awk '{print $1}'; }
 osascript -e 'quit app "MarkdownPreview"' >/dev/null 2>&1; sleep 1
-open -g -a "$HOME/Applications/MarkdownPreview.app" "$PROBES/sample.md"; sleep 3
+open -g -a "/Applications/MarkdownPreview.app" "$PROBES/sample.md"; sleep 3
 first="$(instances)"
 open -g -n -a "$SECOND_COPY" "$HANDED_FILE"; sleep 4
 failures=0
