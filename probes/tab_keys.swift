@@ -26,7 +26,9 @@ enum TabKeysProbe {
         let arrow: NSEvent.ModifierFlags = [.numericPad, .function]  // arrow keys carry these
         expect("⌘← previous tab", key(123, arrow.union(.command)), .previous)
         expect("⌘→ next tab", key(124, arrow.union(.command)), .next)
-        expect("← alone scrolls", key(123, arrow), nil)
+        expect("← previous tab", key(123, arrow), .previous)
+        expect("→ next tab", key(124, arrow), .next)
+        expect("⇧← selects text, not tabs", key(123, arrow.union(.shift)), nil)
         expect("⌥⌘← is not tab navigation", key(123, arrow.union([.command, .option])), nil)
         expect("⌘↑ is not tab navigation", key(126, arrow.union(.command)), nil)
         expect("mouse back button previous tab", mouse(3), .previous)

@@ -10,7 +10,8 @@ Native macOS Markdown viewer plus a Quick Look extension, both backed by one ren
   `[[page]]` wiki links: a page not next to the file is searched in its folder tree like Sublime's MarkdownEditing
   (any case, space/dash/underscore alike); a page found nowhere opens as a new, unsaved file in Sublime Text or VS Code
   (their command line tool; other editors get the file created with a `# page` title).
-- Previous / next tab with ⌘← / ⌘→ or the mouse's back / forward buttons, like a browser's back and forward.
+- Previous / next tab with ← / → (⌘ optional) or the mouse's back / forward buttons, like a browser's back and forward;
+  with a single tab the arrows scroll as usual.
 - One instance and one window only, everything in tabs: files and `.md` links open as a new tab of the window (whatever the system tab
   setting, also when opened in the background or restored at launch); a second copy of the app (`open -n`, another build) hands its files to the running one and quits.
   `open -a MarkdownPreview file.md` on an already open file selects its tab.
