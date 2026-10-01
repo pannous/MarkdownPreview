@@ -15,7 +15,7 @@
 现	xiàn ⿰讠见 ≠ 伣  
 jīng:经 ⿰讠⿱人工  ⿱人工  
 dū:都   ⿰土⻏   ⿰日⻏  ≠ 耶  
-meí:没: ⿰讠几  ⿰讠又
+meí:没: ⿰讠几  ⿰讠又  
 qǐ:起:⿺辶己  
 xiǎng:想: ⿰讠心  
 yì:意:  ⿰讠⿱立日  
@@ -57,8 +57,8 @@ Only two stackings are allowed and not all combinations:
 
 tōng:通:⿺辶同 chuò   ⿺辶⿱一口  ⿺辶𠮛   NOPE   ⿱口一  
 jīng:经 ⿰讠⿱人工  ⿱人工  NOPE 𢀖  
-meí:没: ⿰讠几  ≠ 仉 ⿰氵几 =  㲹 ≈ 氿 ⿰氵非 fēi ⿰氵丰
-meí:没:⿰氵九 = 氿 NOPE 𠘧  	汉	hàn ƒƒƒ!   㲹 : second-round simplified form of 激 jiào !!
+meí:没: ⿰讠几  ≠ 仉 ⿰氵几 =  㲹 ≈ 氿 ⿰氵非 fēi ⿰氵丰  
+meí:没:⿰氵九 = 氿 NOPE 𠘧  	汉	hàn ƒƒƒ!   㲹 : second-round simplified form of 激 jiào !!  
 yì:意:  ⿰讠⿱立日   ≠ 愔  (not 音)  
 gǎn:感:⿱口心 ⿳一口心  ⿱戌心 xián xīn    𠮛 ⿱一口  
 
