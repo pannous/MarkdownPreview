@@ -32,7 +32,7 @@ jīng:经 ⿰讠⿱人工  ⿱人工  NOPE 𢀖
 dū:都   ⿰土⻏ ugly:(  ⿰日⻏  ≠ 耶  
 meí:没:⿰氵九 shui shū  NOPE 𠘧  	汉	hàn ƒƒƒ!  
 qǐ:起:⿺辶己  
-xiǎng:想: ⿱心讠   xiāng xīn
+xiǎng:想:⿰ 讠心   xiāng xīn
 
 
 ér:而:⿱⿱一丿⿵冂⿰丨丨  yī piě jiōng shù gǔn shù gǔn  
