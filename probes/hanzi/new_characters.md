@@ -41,6 +41,8 @@ bèi:被:⿰讠皮 yī pí
 děng:等:⿱⺮寸 zhú sì  
 xīn:新:⿰立斤  
 xīn:新:⿰讠斤 qīn jīn  ≠ 沂 近
+tè:特:⿰讠寸 ≠ 付 ≈  ⿰彳寸 得	dé
+xìn:信:⿰亻讠 rén yán
 
 ér:而:⿱⿱一丿⿵冂⿰丨丨  yī piě jiōng shù gǔn shù gǔn  
 zhaō:着:⿸⺶目 yáng mù
