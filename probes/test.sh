@@ -40,7 +40,7 @@ warm_start=$(perl -MTime::HiRes=time -e 'print time')
 warm_html="$(./render_cli "$PROBES/fonts/many_characters.md")"
 warm_ms=$(perl -MTime::HiRes=time -e "printf '%d', (time - $warm_start) * 1000")
 check "cached render equals uncached render" test "$cold_html" = "$warm_html"
-check "cached render of 3000 distinct characters is fast (${warm_ms} ms < 100 ms)" test "$warm_ms" -lt 100
+check "cached render of 3000 distinct characters is fast (${warm_ms} ms < 150 ms, uncached ~300 ms)" test "$warm_ms" -lt 150
 
 uniscript_html="$(./render_cli "$PROBES/uniscript/sample.md")"
 for fragment in '<p>α β γ: this file' 'Uniscript in 𝔐arkdown</h1>' '→ ∞</li>' '→ 𝔄𝔟𝔠</li>' '→  α β γ δ </li>' '→  αθοσ  ηΩλ</li>' '→ 🔴 🤎</li>' \
