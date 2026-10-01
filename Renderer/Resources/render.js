@@ -95,15 +95,12 @@ marked.use({ extensions: [{
   renderer: ({ href, text }) => `<a href="${escapeHtml(href)}">${escapeHtml(text.trim())}</a>`,
 }] });
 
-// HTML shows a run of spaces as one anyway, but WebKit lays out the text before a collapsed run unshaped: a composed
-// ideographic description sequence (⿰讠尤) then keeps an em per component and leaves a wide gap behind it
-const collapsibleWhitespace = /[ \t\n]{2,}/g;
-const collapsedWhitespace = run => run.includes('\n') ? '\n' : ' ';
-marked.use({
-  walkTokens(token) {
-    if (token.type === 'text' && !token.tokens) token.text = token.text.replace(collapsibleWhitespace, collapsedWhitespace);
-  },
-});
+// WebKit measures every ideograph of a line on its own, as a possible line break; a composed ideographic description
+// sequence (⿰讠尤) then keeps an em per component and leaves a wide gap behind it, unless it is kept in one piece
+const descriptionSequence = /[\u2FF0-\u2FFF][\u2E80-\u2FFF\u3000-\u9FFF\uF900-\uFAFF\u{20000}-\u{3FFFF}]*/gu;
+const textBetweenTags = />[^<]+</g;
+const keepDescriptionSequencesTogether = html => html.replace(textBetweenTags,
+  text => text.replace(descriptionSequence, sequence => `<span class="description-sequence">${sequence}</span>`));
 
 const inlineImageSources = html =>
   html.replace(/(<img\b[^>]*?\bsrc=")([^"]*)(")/gi, (match, before, source, after) => before + resolveImage(source) + after);
@@ -112,5 +109,5 @@ const inlineImageSources = html =>
 function renderMarkdown(source, hasUniscriptHeader = false, versionWarning = null) {
   uniscriptEnabled = hasUniscriptHeader || source.startsWith(uniscriptMarker);
   const warning = versionWarning ? `<p>${uniscriptMarked('uniscript-warning', versionWarning, versionWarning)}</p>\n` : '';
-  return warning + inlineImageSources(marked.parse(source));
+  return warning + keepDescriptionSequencesTogether(inlineImageSources(marked.parse(source)));
 }
