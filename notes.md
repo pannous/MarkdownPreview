@@ -6,3 +6,9 @@
 - macOS 27: WebKit no longer applies user-installed fonts named in CSS, and CTFontCreateWithName no longer finds them (returns Helvetica); CoreText's fallback still picks them. Fix: @font-face src userfont://<file> served by UserFontSchemeHandler (app) or as cid: attachments (Quick Look)
 - Uniscript sequences (hieroglyph groups with U+13430 joiners, ⿰犭句) need one font for the whole sequence; per-character fallback (CoreText and WebKit) splits them, so their fonts go first behind a unicode-range alias
 - Probe pitfall: evaluateJavaScript does not await promises; wait for document.fonts.ready with callAsyncJavaScript or the snapshot shows the font swap
+
+- WebKit (page from loadHTMLString with a file: baseURL) drops a click on a file: link whose file does not exist: no
+  decidePolicyFor call, no console error. Existing files navigate normally. Fix: a user script posts local link clicks
+  to a WKScriptMessageHandler (MarkdownWebView linkScript). Check with `xcrun swift probes/press_link.swift <window> <link>`
+  (AXPress, no mouse) and `log show --info --predicate 'subsystem == "com.pannous.MarkdownPreview"'`.
+- SteerMouse's Back / Forward arrive in the app; ⌘[ / ⌘] are now tab switching, folding moved to ⌃[ / ⌃].
