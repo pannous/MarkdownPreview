@@ -5,16 +5,29 @@
 能	néng  ⿰⺝匕  
 得	dé ⿰彳寸 ≠ 付  
 
+
 # Complex
 Characters up to 8 strokes are supported!  
 ⿰鱼电  
 ⿴囗鱼
 
 # Test
-Some of these may not work:  
 ⿰木电  
 ⿴囗电  
 ⿱宀⿰电电  
+
+# Limitations
+Only two stackings are allowed and not all combinations:
 ⿴囗⿰电电 While conceptually easy, we can only 囗-wrap simple characters.  
-⿱艹猫  
-⿴囗猫  
+
+⿸⺶目
+⿸⺶木
+⿵冂木
+⿵冂目
+
+ér:而:⿱⿱一丿⿵冂⿰丨丨  yī piě jiōng shù gǔn shù gǔn 
+zhaō:着:⿸⺶目 yáng mù
+
+Only characters with up to 8 strokes are supported. Others need to be built from scratch. 
+⿱艹猫  Too complex for our font  
+⿴囗猫  Too complex for our font  
