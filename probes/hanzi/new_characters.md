@@ -45,12 +45,13 @@ tè:特:⿰讠寸 ≠ 付 ≈  ⿰彳寸 得	dé
 xìn:信:⿰亻讠 rén yán  
 tōng:通:⿺辶同 chuò   ⿺辶  ⿺辶𠮛   NOPE
 jiāo:教:⿰讠攵 xiaò pū
-tí:提:⿰扌是 shǒu shì
+tí:提:⿰扌日 shǒu shì  是
+
+<:chinese ri>
 
 ér:而:⿱⿱一丿⿵冂⿰丨丨  yī piě jiōng shù gǔn shù gǔn  
 zhaō:着:⿸⺶目 yáng mù
-<:chinese ri>
-	
+
 hǎi:海:⿰氵每 shui meǐ   毋 母 ??  
 Only characters with up to 8 strokes are supported. Others need to be built from scratch.  
 ⿱艹猫  Too complex for our font  
