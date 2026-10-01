@@ -4,8 +4,11 @@ private let leftArrowKeyCode: UInt16 = 123
 private let rightArrowKeyCode: UInt16 = 124
 private let backMouseButton = 3
 private let forwardMouseButton = 4
+/// ⌘[ / ⌘]: the Mac's back / forward, also what SteerMouse sends for its Back / Forward buttons
+private let backKeys: Set<String> = ["["], forwardKeys: Set<String> = ["]"]
 
-/// The browser's back and forward select the previous and next tab: ← / →, ⌘← / ⌘→ and the mouse's back / forward buttons.
+/// The browser's back and forward select the previous and next tab: ← / →, ⌘← / ⌘→, ⌘[ / ⌘] and the mouse's back /
+/// forward buttons.
 /// With a single tab the event passes through untouched.
 enum TabNavigation {
     enum Step { case previous, next }
@@ -15,6 +18,9 @@ enum TabNavigation {
         case .keyDown:
             let modifiers = event.modifierFlags.intersection(.deviceIndependentFlagsMask).subtracting([.numericPad, .function])
             guard modifiers.isEmpty || modifiers == .command else { return nil }
+            let key = event.charactersIgnoringModifiers ?? ""
+            if modifiers == .command && backKeys.contains(key) { return .previous }
+            if modifiers == .command && forwardKeys.contains(key) { return .next }
             return [leftArrowKeyCode: .previous, rightArrowKeyCode: .next][event.keyCode]
         case .otherMouseDown:
             return [backMouseButton: .previous, forwardMouseButton: .next][event.buttonNumber]

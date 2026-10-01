@@ -10,13 +10,14 @@ Native macOS Markdown viewer plus a Quick Look extension, both backed by one ren
   `[[page]]` wiki links: a page not next to the file is searched in its folder tree like Sublime's MarkdownEditing
   (any case, space/dash/underscore alike); a page found nowhere opens as a new, unsaved file in Sublime Text or VS Code
   (their command line tool; other editors get the file created with a `# page` title).
-- Previous / next tab with ← / → (⌘ optional) or the mouse's back / forward buttons, like a browser's back and forward;
+- Previous / next tab with ← / → (⌘ optional), ⌘[ / ⌘] or the mouse's back / forward buttons (SteerMouse sends ⌘[ / ⌘]),
+  like a browser's back and forward;
   with a single tab the arrows scroll as usual.
 - One instance and one window only, everything in tabs: files and `.md` links open as a new tab of the window (whatever the system tab
   setting, also when opened in the background or restored at launch); a second copy of the app (`open -n`, another build) hands its files to the running one and quits.
   `open -a MarkdownPreview file.md` on an already open file selects its tab.
 - Zoom with ⌘ or ⌃ and `+`/`=` / `-`/`_` (Shift optional), reset with ⌘0; shared by all windows and remembered.
-- Collapse sections level by level with ⌘[ or ⌃[ (deepest open level first), expand with ⌘] or ⌃]; click a heading to fold just it. Folds survive live reload.
+- Collapse sections level by level with ⌃[ (deepest open level first), expand with ⌃]; click a heading to fold just it. Folds survive live reload.
 - Floating **Fix** button (⌘⇧L) left of Edit: adds two trailing spaces to every line followed by another text line (headings excepted), so each newline
   shows as a line break instead of being joined into the paragraph. Fenced code is left alone; a file with nothing to fix just beeps.
 - Collapsible **Contents** panel at the right edge below Edit: jump to any heading, revealing folded sections automatically. Escape closes the panel. Updates on live reload.

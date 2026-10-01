@@ -1,8 +1,9 @@
 import AppKit
 import SwiftUI
 
-/// Section folding in the key window: ⌘[ or ⌃[ collapses the deepest open heading level, ⌘] or ⌃] expands the
-/// shallowest collapsed one (Shift optional, so { and } work too). The page side lives in folding.js.
+/// Section folding in the key window: ⌃[ collapses the deepest open heading level, ⌃] expands the shallowest collapsed
+/// one (Shift optional, so { and } work too); ⌘[ / ⌘] are the Mac's back / forward and switch tabs (TabNavigation).
+/// The page side lives in folding.js.
 enum Folding {
     static let notification = Notification.Name("MarkdownPreviewFolding")
     private static let collapseKeys: Set<String> = ["[", "{"]
@@ -25,7 +26,7 @@ enum Folding {
 
     static func installKeyboardShortcuts() {
         NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
-            guard let action = action(for: event) else { return event }
+            guard TabNavigation.step(for: event) == nil, let action = action(for: event) else { return event }
             perform(action)
             return nil
         }
@@ -35,8 +36,8 @@ enum Folding {
 struct FoldingCommands: Commands {
     var body: some Commands {
         CommandGroup(after: .toolbar) {
-            Button("Collapse Sections") { Folding.perform(.collapse) }.keyboardShortcut("[")
-            Button("Expand Sections") { Folding.perform(.expand) }.keyboardShortcut("]")
+            Button("Collapse Sections") { Folding.perform(.collapse) }.keyboardShortcut("[", modifiers: .control)
+            Button("Expand Sections") { Folding.perform(.expand) }.keyboardShortcut("]", modifiers: .control)
         }
     }
 }

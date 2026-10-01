@@ -6,9 +6,9 @@ import AppKit
 enum TabKeysProbe {
     static var failures = 0
 
-    static func key(_ keyCode: UInt16, _ modifiers: NSEvent.ModifierFlags) -> NSEvent {
+    static func key(_ keyCode: UInt16, _ modifiers: NSEvent.ModifierFlags, _ characters: String = "") -> NSEvent {
         NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: modifiers, timestamp: 0, windowNumber: 0, context: nil,
-                         characters: "", charactersIgnoringModifiers: "", isARepeat: false, keyCode: keyCode)!
+                         characters: characters, charactersIgnoringModifiers: characters, isARepeat: false, keyCode: keyCode)!
     }
 
     static func mouse(_ button: Int) -> NSEvent {
@@ -31,6 +31,10 @@ enum TabKeysProbe {
         expect("⇧← selects text, not tabs", key(123, arrow.union(.shift)), nil)
         expect("⌥⌘← is not tab navigation", key(123, arrow.union([.command, .option])), nil)
         expect("⌘↑ is not tab navigation", key(126, arrow.union(.command)), nil)
+        expect("⌘[ previous tab (SteerMouse Back)", key(33, .command, "["), .previous)
+        expect("⌘] next tab (SteerMouse Forward)", key(30, .command, "]"), .next)
+        expect("⌃[ folds, not tabs", key(33, .control, "["), nil)
+        expect("[ alone types", key(33, [], "["), nil)
         expect("mouse back button previous tab", mouse(3), .previous)
         expect("mouse forward button next tab", mouse(4), .next)
         expect("middle button ignored", mouse(2), nil)

@@ -83,7 +83,7 @@ check "description sequences leave no gap (double spaces, bold, inline-block)" "
 
 xcrun swiftc -parse-as-library "$PROBES/../App/Zoom.swift" "$PROBES/../App/KeyShortcut.swift" "$PROBES/zoom_keys.swift" -o "$PROBES/zoom_keys" 2>/dev/null
 check "zoom shortcuts (⌘/⌃ with =/+/-/_/0)" "$PROBES/zoom_keys"
-xcrun swiftc -parse-as-library "$PROBES/../App/Folding.swift" "$PROBES/../App/KeyShortcut.swift" "$PROBES/fold_sections.swift" -o "$PROBES/fold_sections" 2>/dev/null
+xcrun swiftc -parse-as-library "$PROBES/../App/Folding.swift" "$PROBES/../App/TabNavigation.swift" "$PROBES/../App/KeyShortcut.swift" "$PROBES/fold_sections.swift" -o "$PROBES/fold_sections" 2>/dev/null
 check "section folding (⌘/⌃ [ ], click, survives reload) in an offscreen WKWebView" "$PROBES/fold_sections"
 
 xcrun swiftc -parse-as-library "$PROBES/../App/LineBreaks.swift" "$PROBES/line_breaks.swift" -o "$PROBES/line_breaks" 2>/dev/null
@@ -91,7 +91,7 @@ check "Fix button turns newlines into hard line breaks (fences untouched)" "$PRO
 xcrun swiftc -parse-as-library "$PROBES/../App/WikiLinks.swift" "$PROBES/wiki_links/resolve.swift" -o "$PROBES/wiki_links/resolve" 2>/dev/null
 check "wiki links to pages elsewhere in the folder tree, missing ones named for the editor" "$PROBES/wiki_links/resolve"
 xcrun swiftc -parse-as-library "$PROBES/../App/TabNavigation.swift" "$PROBES/tab_keys.swift" -o "$PROBES/tab_keys" 2>/dev/null
-check "previous / next tab with ← → (⌘ optional) and the mouse's back / forward buttons" "$PROBES/tab_keys"
+check "previous / next tab with ← → (⌘ optional), ⌘[ ⌘] and the mouse's back / forward buttons" "$PROBES/tab_keys"
 
 check "Quick Look extension enabled" bash -c "pluginkit -m -v -i $EXTENSION_ID | grep -q '^+'"
 check "Markdown extension listed" bash -c "pluginkit -m -v | grep -qi markdown"
