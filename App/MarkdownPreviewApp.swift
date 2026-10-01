@@ -19,6 +19,11 @@ struct MarkdownDocument: FileDocument {
 final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { true }
 
+    func applicationWillFinishLaunching(_ notification: Notification) {
+        SingleInstance.handOverIfAlreadyRunning()
+        Tabs.preferAlways()
+    }
+
     func applicationDidFinishLaunching(_ notification: Notification) {
         Zoom.installKeyboardShortcuts()
         Folding.installKeyboardShortcuts()

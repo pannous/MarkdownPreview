@@ -106,6 +106,7 @@ pkill -x qlmanage
 open -a MarkdownPreview "$SAMPLE"; sleep 3
 open -a MarkdownPreview "$SAMPLE"; sleep 2
 check "reopening the same file keeps one window" test "$(osascript -e 'tell application "System Events" to count (windows of process "MarkdownPreview" whose name is "sample.md")')" = 1
+check "one instance: a second copy hands its file over and exits" "$PROBES/single_instance.sh"
 osascript -e 'tell application "MarkdownPreview" to activate' >/dev/null; sleep 1
 check "app window captured" capture_window MarkdownPreview app_window.png
 

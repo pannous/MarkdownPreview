@@ -35,6 +35,8 @@ ditto "$BUILT_APP" "$INSTALLED_APP"
 touch "$INSTALLED_APP"  # ditto keeps the build timestamp; a fresh one makes the Dock/app switcher drop cached icons
 
 "$LSREGISTER" -f -R -trusted "$INSTALLED_APP"
+# xcodebuild registers the build copy too, and Launch Services may then start it as a second instance next to the installed one
+"$LSREGISTER" -u "$BUILT_APP"
 pluginkit -a "$INSTALLED_APP/Contents/PlugIns/MarkdownQuickLook.appex"
 pluginkit -e use -i "$EXTENSION_ID"
 qlmanage -r >/dev/null

@@ -17,3 +17,5 @@ TODO: probes/test.sh expects '→ 𓀀𓐰𓁐 ⿰犭句</li>', now '→ 𓀀�
 TODO: probes/test.sh composes() uses macOS awk, which compares multibyte strings wrongly ('𓀀𓐰𓁐' == '⿰犭句' is true), so "ideographic description composes in WebKit" passes on the hieroglyph line; and sequence_shaping's range width counts characters (3.00 even when composed). Both checks are false positives.
 DONE: Startup: restored tabs load lazily (only the selected tab renders and starts a web process); font fallback answers cached on disk.
 TODO: Lazy tab loading verified at launch (1 web process, selected tab loads); switching to a not-yet-loaded tab only reasoned (didBecomeKey), not exercised by a probe (needs UI).
+DONE: One app instance (second copies hand their files over), every document and .md link opens as a tab; install.sh unregisters the build copy.
+TODO: Clicking a [[wiki link]] opens a tab via NSDocumentController (same path as open events, verified); the click itself is not exercised by a probe (needs UI).

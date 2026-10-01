@@ -7,7 +7,9 @@ Native macOS Markdown viewer plus a Quick Look extension, both backed by one ren
 - GitHub-flavoured Markdown: bordered tables, fenced code with syntax highlighting, task lists, strikethrough, autolinks, heading anchors.
 - Images relative to the file are inlined; follows system light/dark mode; no network needed for rendering.
 - Live reload on save (also atomic saves), scroll position kept. Links open in the default browser only when clicked; relative `.md` links open in the app.
-- `open -a MarkdownPreview file.md` on an already open file focuses its window.
+- One instance only, everything in tabs: files and `.md` links open as a new tab of the window (whatever the system tab
+  setting); a second copy of the app (`open -n`, another build) hands its files to the running one and quits.
+  `open -a MarkdownPreview file.md` on an already open file selects its tab.
 - Zoom with ⌘ or ⌃ and `+`/`=` / `-`/`_` (Shift optional), reset with ⌘0; shared by all windows and remembered.
 - Collapse sections level by level with ⌘[ or ⌃[ (deepest open level first), expand with ⌘] or ⌃]; click a heading to fold just it. Folds survive live reload.
 - Floating **Fix** button (⌘⇧L) left of Edit: adds two trailing spaces to every line followed by another text line (headings excepted), so each newline
