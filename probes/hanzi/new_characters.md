@@ -9,8 +9,12 @@
 Characters up to 8 strokes are supported!  
 ⿰鱼电  
 
-# Neue Zeichen
-
-⿰讠尤  ⿱艹猫  ⿴囗猫  ⿰木电  ⿱宀⿰电电
+# Test
+Some of these may not work:
+⿰木电  
+⿴囗电  
+⿱宀⿰电电
+⿱艹猫  
+⿴囗猫  
 
 Im Satz: 我的⿱艹猫在⿴囗猫里。 Latin then ⿰讠尤.
