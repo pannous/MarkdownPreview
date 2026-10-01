@@ -1,8 +1,8 @@
 `<:beside 讠 尤>` `⿰讠尤` <:beside 讠 尤> = ⿰讠尤
 
-# Suggested simplifications
+# Suggested simplifications  
 就	jiù  ⿰讠尤  
-能	néng ⿱匕月   ⿰讠䏍  
+能	néng ⿱匕月  
 得	dé ⿰彳寸  ≠ 付  
 ⿱艹猫  
 ⿰鱼电  
