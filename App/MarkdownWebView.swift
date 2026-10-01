@@ -2,11 +2,35 @@ import AppKit
 import MarkdownRenderer
 import SwiftUI
 import WebKit
+import os
 
+/// `log stream --predicate 'subsystem == "com.pannous.MarkdownPreview"'` traces where a clicked link goes
+private let linkLog = Logger(subsystem: "com.pannous.MarkdownPreview", category: "links")
 private let markdownExtensions: Set<String> = ["md", "markdown", "mdown", "mkd", "mkdn"]
 private let foldingScript = WKUserScript(
     source: (try? String(contentsOf: Bundle.main.url(forResource: "folding", withExtension: "js")!, encoding: .utf8)) ?? "",
     injectionTime: .atDocumentEnd, forMainFrameOnly: true)
+
+/// WebKit never asks the navigation delegate about file: links of a page loaded from a string (it just refuses them), so
+/// a click on a local link is sent to the app instead; links within the same page keep their default
+private let linkMessage = "openLink"
+private let linkScript = WKUserScript(source: """
+    document.addEventListener('click', event => {
+      const link = event.target.closest('a[href]');
+      if (!link || link.protocol !== 'file:' || link.pathname === location.pathname) return;
+      event.preventDefault();
+      webkit.messageHandlers.\(linkMessage).postMessage(link.href);
+    });
+    """, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
+
+/// Script messages reach the coordinator without the content controller keeping it (and its tab) alive.
+private final class WeakMessageHandler: NSObject, WKScriptMessageHandler {
+    weak var target: WKScriptMessageHandler?
+    init(_ target: WKScriptMessageHandler) { self.target = target }
+    func userContentController(_ controller: WKUserContentController, didReceive message: WKScriptMessage) {
+        target?.userContentController(controller, didReceive: message)
+    }
+}
 
 /// WKWebView showing the rendered file; re-renders on save by swapping the body so the scroll position stays.
 struct MarkdownWebView: NSViewRepresentable {
@@ -19,6 +43,8 @@ struct MarkdownWebView: NSViewRepresentable {
         let configuration = WKWebViewConfiguration()
         configuration.setURLSchemeHandler(UserFontSchemeHandler(), forURLScheme: UserFontSchemeHandler.scheme)
         configuration.userContentController.addUserScript(foldingScript)
+        configuration.userContentController.addUserScript(linkScript)
+        configuration.userContentController.add(WeakMessageHandler(context.coordinator), name: linkMessage)
         let webView = WKWebView(frame: .zero, configuration: configuration)
         webView.navigationDelegate = context.coordinator
         context.coordinator.attach(webView)
@@ -29,7 +55,7 @@ struct MarkdownWebView: NSViewRepresentable {
         webView.pageZoom = zoom
     }
 
-    final class Coordinator: NSObject, WKNavigationDelegate {
+    final class Coordinator: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
         private let fileURL: URL
         private weak var webView: WKWebView?
         private var watcher: FileWatcher?
@@ -83,8 +109,19 @@ struct MarkdownWebView: NSViewRepresentable {
 
         func webView(_ webView: WKWebView, decidePolicyFor action: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
             guard action.navigationType == .linkActivated, let url = action.request.url else { return decisionHandler(.allow) }
+            linkLog.info("link \(url.absoluteString, privacy: .public)")
             if isAnchorInCurrentDocument(url) { return decisionHandler(.allow) }
             decisionHandler(.cancel)
+            openLink(url)
+        }
+
+        func userContentController(_ controller: WKUserContentController, didReceive message: WKScriptMessage) {
+            guard let address = message.body as? String, let url = URL(string: address) else { return }
+            linkLog.info("link \(url.absoluteString, privacy: .public)")
+            openLink(url)
+        }
+
+        private func openLink(_ url: URL) {
             if url.isFileURL && markdownExtensions.contains(url.pathExtension.lowercased()) {
                 openPage(url)
             } else {
@@ -95,6 +132,7 @@ struct MarkdownWebView: NSViewRepresentable {
         /// A page found anywhere below the document opens as a tab; one found nowhere opens as a new file in the editor
         private func openPage(_ link: URL) {
             let page = FileManager.default.fileExists(atPath: link.path) ? link : WikiLinks.resolve(link, from: fileURL)
+            linkLog.info("page \(page?.path ?? "found nowhere", privacy: .public)")
             guard let page else { return openNewPage(WikiLinks.newPage(link)) }
             NSDocumentController.shared.openDocument(withContentsOf: page, display: true) { _, _, error in
                 if let error { NSApp.presentError(error) }
@@ -103,7 +141,9 @@ struct MarkdownWebView: NSViewRepresentable {
 
         private func openNewPage(_ page: URL) {
             do {
-                if try !Editor.openNew(page) {
+                let opened = try Editor.openNew(page)
+                linkLog.info("new page \(page.path, privacy: .public) opened by the editor: \(opened)")
+                if !opened {
                     try WikiLinks.create(page)
                     Editor.open(page)
                 }

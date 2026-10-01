@@ -25,3 +25,4 @@ DONE: Standard hieroglyphs sat high (baseline) next to Aegyptus' extended ones (
 - DONE second window instead of a tab (files opened with open -g, restored windows): every document window joins the existing tab group (Tabs.join, probes/one_window.sh)
 - DONE wiki links to missing pages did nothing silently: searched in the folder tree, else created and opened in the editor (probes/wiki_links/resolve.swift)
 - probes/test.sh fails "user-installed fonts named for rare glyphs" and "uniscript: renderer emits → 𓀀𓐰𓁐 ⿰犭句" (the stacked-hieroglyphs span from ec9da20 changes the expected HTML)
+- DONE clicking a link to a missing page did nothing: WebKit drops file: links to files that do not exist without asking the navigation delegate; a page script now hands local links to the app (MarkdownWebView linkScript), so missing pages open as new files in Sublime. probes/press_link.swift presses a link by accessibility to check it
