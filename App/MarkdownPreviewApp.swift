@@ -27,6 +27,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         Zoom.installKeyboardShortcuts()
         Folding.installKeyboardShortcuts()
+        TabNavigation.installShortcuts()
     }
 }
 

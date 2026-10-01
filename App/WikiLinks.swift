@@ -7,7 +7,7 @@ private let markdownExtension = "md"
 
 /// [[page]] links to files that are not next to the document, resolved like Sublime's MarkdownEditing wiki_page.py:
 /// the document's folder tree is searched, ignoring case and treating " ", "-" and "_" alike; a "dir/page" link only
-/// matches inside a folder ending in dir. A page found nowhere is created next to the document.
+/// matches inside a folder ending in dir. A page found nowhere opens as a new file in the editor.
 enum WikiLinks {
     static func resolve(_ link: URL, from document: URL) -> URL? {
         let root = document.deletingLastPathComponent()
@@ -24,14 +24,18 @@ enum WikiLinks {
         return matches.min { $0.pathComponents.count < $1.pathComponents.count }
     }
 
-    /// The new page: spaces become dashes, a "# page" title so the editor shows what it is
-    static func create(_ link: URL) throws -> URL {
-        let page = link.deletingPathExtension().lastPathComponent
-        let file = link.deletingLastPathComponent().appendingPathComponent(page.replacingOccurrences(of: " ", with: "-"))
-            .appendingPathExtension(markdownExtension)
-        try FileManager.default.createDirectory(at: file.deletingLastPathComponent(), withIntermediateDirectories: true)
-        if !FileManager.default.fileExists(atPath: file.path) { try "# \(page)\n".write(to: file, atomically: true, encoding: .utf8) }
-        return file
+    /// Where a page found nowhere goes: next to the link's target, spaces become dashes
+    static func newPage(_ link: URL) -> URL {
+        let page = link.deletingPathExtension().lastPathComponent.replacingOccurrences(of: " ", with: "-")
+        return link.deletingLastPathComponent().appendingPathComponent(page).appendingPathExtension(markdownExtension)
+    }
+
+    /// The new page on disk with a "# page" title, for editors that cannot open a file that does not exist yet
+    static func create(_ page: URL) throws {
+        try FileManager.default.createDirectory(at: page.deletingLastPathComponent(), withIntermediateDirectories: true)
+        if !FileManager.default.fileExists(atPath: page.path) {
+            try "# \(page.deletingPathExtension().lastPathComponent)\n".write(to: page, atomically: true, encoding: .utf8)
+        }
     }
 
     private static func comparable(_ name: String) -> String {

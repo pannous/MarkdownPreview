@@ -89,7 +89,9 @@ check "section folding (⌘/⌃ [ ], click, survives reload) in an offscreen WKW
 xcrun swiftc -parse-as-library "$PROBES/../App/LineBreaks.swift" "$PROBES/line_breaks.swift" -o "$PROBES/line_breaks" 2>/dev/null
 check "Fix button turns newlines into hard line breaks (fences untouched)" "$PROBES/line_breaks"
 xcrun swiftc -parse-as-library "$PROBES/../App/WikiLinks.swift" "$PROBES/wiki_links/resolve.swift" -o "$PROBES/wiki_links/resolve" 2>/dev/null
-check "wiki links to pages elsewhere in the folder tree, missing ones created" "$PROBES/wiki_links/resolve"
+check "wiki links to pages elsewhere in the folder tree, missing ones named for the editor" "$PROBES/wiki_links/resolve"
+xcrun swiftc -parse-as-library "$PROBES/../App/TabNavigation.swift" "$PROBES/tab_keys.swift" -o "$PROBES/tab_keys" 2>/dev/null
+check "previous / next tab with ⌘← ⌘→ and the mouse's back / forward buttons" "$PROBES/tab_keys"
 
 check "Quick Look extension enabled" bash -c "pluginkit -m -v -i $EXTENSION_ID | grep -q '^+'"
 check "Markdown extension listed" bash -c "pluginkit -m -v | grep -qi markdown"

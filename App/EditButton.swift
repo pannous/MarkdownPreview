@@ -6,6 +6,9 @@ private let editorOverrideKey = "editorBundleIdentifier"
 /// Keeps the button clear of the web view's overlay scroller.
 private let scrollerClearance: CGFloat = 20
 private let preferredEditorBundleIdentifiers = ["com.sublimetext.4", "com.sublimetext.3", "com.microsoft.VSCode", "com.apple.TextEdit"]
+/// The editor's command line tool, which opens a path not on disk yet as a new, unsaved file
+private let commandLineTools = ["com.sublimetext.4": "Contents/SharedSupport/bin/subl", "com.sublimetext.3": "Contents/SharedSupport/bin/subl",
+                                "com.microsoft.VSCode": "Contents/Resources/app/bin/code"]
 
 enum Editor {
     static var applicationURL: URL? {
@@ -19,6 +22,14 @@ enum Editor {
     static func open(_ fileURL: URL) {
         guard let applicationURL else { return NSSound.beep() }
         NSWorkspace.shared.open([fileURL], withApplicationAt: applicationURL, configuration: NSWorkspace.OpenConfiguration())
+    }
+
+    /// A file that does not exist yet as an unsaved file of the editor; false when the editor has no command line tool
+    static func openNew(_ fileURL: URL) throws -> Bool {
+        guard let applicationURL, let identifier = Bundle(url: applicationURL)?.bundleIdentifier,
+              let tool = commandLineTools[identifier] else { return false }
+        try Process.run(applicationURL.appendingPathComponent(tool), arguments: [fileURL.path])
+        return true
     }
 }
 

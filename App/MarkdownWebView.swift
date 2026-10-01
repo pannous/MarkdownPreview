@@ -92,16 +92,22 @@ struct MarkdownWebView: NSViewRepresentable {
             }
         }
 
-        /// A page found anywhere below the document opens as a tab; one found nowhere is created and opened in the editor
+        /// A page found anywhere below the document opens as a tab; one found nowhere opens as a new file in the editor
         private func openPage(_ link: URL) {
             let page = FileManager.default.fileExists(atPath: link.path) ? link : WikiLinks.resolve(link, from: fileURL)
-            guard let page else {
-                do { Editor.open(try WikiLinks.create(link)) } catch { NSApp.presentError(error) }
-                return
-            }
+            guard let page else { return openNewPage(WikiLinks.newPage(link)) }
             NSDocumentController.shared.openDocument(withContentsOf: page, display: true) { _, _, error in
                 if let error { NSApp.presentError(error) }
             }
+        }
+
+        private func openNewPage(_ page: URL) {
+            do {
+                if try !Editor.openNew(page) {
+                    try WikiLinks.create(page)
+                    Editor.open(page)
+                }
+            } catch { NSApp.presentError(error) }
         }
 
         private func isAnchorInCurrentDocument(_ url: URL) -> Bool {

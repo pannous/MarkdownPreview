@@ -18,21 +18,23 @@ enum WikiLinksProbe {
     }
 
     static func main() {
+        try? FileManager.default.removeItem(at: root)
         for path in ["index.md", "sub/Notes.md", "other_page.md", "deep/guide.md", "elsewhere/guide.md", "a/b/guide.md", "build/hidden.md"] {
             try! FileManager.default.createDirectory(at: file(path).deletingLastPathComponent(), withIntermediateDirectories: true)
             try! "".write(to: file(path), atomically: true, encoding: .utf8)
         }
-        defer { try? FileManager.default.removeItem(at: root) }
         expect("a page in a subfolder, any case", "notes.md", "sub/Notes.md")
         expect("space, dash and underscore alike", "other page.md", "other_page.md")
         expect("dir/page only inside a folder ending in dir", "deep/guide.md", "deep/guide.md")
         expect("the shallowest of several matches", "guide.md", "deep/guide.md")
         expect("build output is not searched", "hidden.md", nil)
         expect("a missing page is not found", "test.md", nil)
-        let created = try! WikiLinks.create(file("new page.md"))
-        let ok = created.lastPathComponent == "new-page.md" && (try? String(contentsOf: created, encoding: .utf8)) == "# new page\n"
-        print(ok ? "ok  " : "FAIL", "a missing page is created with its title")
+        let created = WikiLinks.newPage(file("new page.md"))
+        try! WikiLinks.create(created)
+        let ok = created.lastPathComponent == "new-page.md" && (try? String(contentsOf: created, encoding: .utf8)) == "# new-page\n"
+        print(ok ? "ok  " : "FAIL", "a missing page is named with dashes and created with its title")
         if !ok { failures += 1 }
+        try? FileManager.default.removeItem(at: root)
         exit(Int32(failures))
     }
 }
