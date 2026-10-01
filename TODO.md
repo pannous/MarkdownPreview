@@ -10,3 +10,5 @@ TODO: ~/.swiftly swift 6.0.3 is first in PATH and cannot import Foundation with 
 - DONE hieroglyph groups render small (NewGardinerOmni scales a quadrat into one em); maybe size-adjust on the Sequence Hieroglyphs face
 - TAG suffix effects (<:red A>) need Uniscript Sans to draw the base letter; not in the sequence fonts because a Latin range would restyle all text
 - DONE UserFontSchemeHandler logs every served font (trace while the app's font loading is unconfirmed); drop the success NSLog once confirmed
+DONE: Fix button (⌘⇧L) that adds two trailing spaces to soft newlines so they render as line breaks.
+TODO: probes/test.sh "user-installed fonts named for rare glyphs" fails (pre-existing, seen 2026-10-01 before the Fix button work).

@@ -10,6 +10,8 @@ Native macOS Markdown viewer plus a Quick Look extension, both backed by one ren
 - `open -a MarkdownPreview file.md` on an already open file focuses its window.
 - Zoom with ⌘ or ⌃ and `+`/`=` / `-`/`_` (Shift optional), reset with ⌘0; shared by all windows and remembered.
 - Collapse sections level by level with ⌘[ or ⌃[ (deepest open level first), expand with ⌘] or ⌃]; click a heading to fold just it. Folds survive live reload.
+- Floating **Fix** button (⌘⇧L) left of Edit: adds two trailing spaces to every line followed by another text line, so each newline
+  shows as a line break instead of being joined into the paragraph. Fenced code is left alone; a file with nothing to fix just beeps.
 - Collapsible **Contents** panel at the right edge below Edit: jump to any heading, revealing folded sections automatically. Escape closes the panel. Updates on live reload.
 - Floating **Edit** button (⌘E) opens the file in Sublime Text (falls back to VS Code, then TextEdit;
   override with `defaults write com.pannous.MarkdownPreview editorBundleIdentifier <bundle id>`).
