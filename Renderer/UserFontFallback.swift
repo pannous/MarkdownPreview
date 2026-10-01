@@ -28,6 +28,9 @@ enum UserFontFallback {
     private static let sequenceFonts = [
         SequenceFont(alias: "Sequence Hieroglyphs", postScriptName: "NewGardinerOmni-Regular",
                      triggers: [0x13430...0x1345F], unicodeRange: "U+13000-143FF", sizeAdjust: hieroglyphScale),
+        // composes IDS of its ~1,900 parts into new characters (⿰讠尤); characters it lacks fall through to Uniscript CJK
+        SequenceFont(alias: "Sequence New Ideographs", postScriptName: "UniscriptHanzi-Regular",
+                     triggers: [0x2FF0...0x2FFF], unicodeRange: "U+2E80-2FFF, U+3000-9FFF, U+F900-FAFF, U+20000-3FFFF"),
         SequenceFont(alias: "Sequence Ideographs", postScriptName: "UniscriptCJK-Regular",
                      triggers: [0x2FF0...0x2FFF, 0x31EF...0x31EF], unicodeRange: "U+2E80-2FFF, U+3000-9FFF, U+F900-FAFF, U+20000-3FFFF"),
     ]
