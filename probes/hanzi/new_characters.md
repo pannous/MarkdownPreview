@@ -49,6 +49,7 @@ tí:提:⿰扌日 shǒu shì  是
 jiě:解: ⿱刀牛  daō niú  jiaǒ  
 zhēn:真:⿱十日 具 shí jù
 
+<:cn zao>
 <:chinese zao>
 <:chinese ri>
 
