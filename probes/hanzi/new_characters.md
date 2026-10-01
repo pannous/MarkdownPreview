@@ -4,12 +4,6 @@
 就	jiù  ⿰讠尤  
 能	néng  ⿰⺝匕  
 得	dé ⿰彳寸 ≠ 付  
-
-⿸⺶目  
-⿸⺶木  
-⿵冂木  
-⿵冂目  
-⿺辶首  
 道	dào  ⿺辶目  
 然	rán	⿱犬灬  ⿱人灬  
 现	xiàn ⿰讠见 ≠ 伣  
@@ -48,6 +42,10 @@ Characters up to 8 strokes are supported!
 
 # Test
 ⿰木电  
+⿸⺶目  
+⿸⺶木  
+⿵冂木  
+⿵冂目  
 ⿴囗电  
 ⿱宀⿰电电  
 
@@ -74,6 +72,7 @@ Only characters with up to 8 strokes are supported. Others need to be built from
 ⿱艹猫  Too complex for our font  
 ⿴囗猫  Too complex for our font  
 
+⿺辶首  
 
 ∑ 		1 	ONE STROKES 	〇 一 ⺂ 丨 . 丶 丿 亅 乙 ⺄ 乚 ⺃ vs 厂 ⺁  
 ∑ 		2 	TWO STROKES 	丁 七 九 了 二 人 入 八 刀 力 十 又 乃 厂 ⺁  
