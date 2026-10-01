@@ -12,3 +12,6 @@ TODO: ~/.swiftly swift 6.0.3 is first in PATH and cannot import Foundation with 
 - DONE UserFontSchemeHandler logs every served font (trace while the app's font loading is unconfirmed); drop the success NSLog once confirmed
 DONE: Fix button (⌘⇧L) that adds two trailing spaces to soft newlines so they render as line breaks.
 TODO: probes/test.sh "user-installed fonts named for rare glyphs" fails (pre-existing, seen 2026-10-01 before the Fix button work).
+DONE: Composed ideographic description sequences (⿰讠⿱人工) left a wide gap before double spaces and at the end of bold/italic: WebKit measured each ideograph alone as a line-break item; sequences now sit in a word-break: keep-all span.
+TODO: probes/test.sh expects '→ 𓀀𓐰𓁐 ⿰犭句</li>', now '→ 𓀀𓐰𓁐 <span class="description-sequence">⿰犭句</span></li>'; update the expected string once permitted (user's test).
+TODO: probes/test.sh composes() uses macOS awk, which compares multibyte strings wrongly ('𓀀𓐰𓁐' == '⿰犭句' is true), so "ideographic description composes in WebKit" passes on the hieroglyph line; and sequence_shaping's range width counts characters (3.00 even when composed). Both checks are false positives.

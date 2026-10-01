@@ -64,6 +64,8 @@ check "hieroglyphs enlarged" grep -qF 'unicode-range: U+13000-143FF; size-adjust
 check "hieroglyph group composes in WebKit" composes '𓀀𓐰𓁐'
 check "ideographic description composes in WebKit" composes '⿰犭句'
 check "brackets keep the text font" grep -qF '16.02 Brackets' <<<"$shaping"
+xcrun swiftc -O -parse-as-library "$PROBES/ids_spacing.swift" -o "$PROBES/ids_spacing" -F "$FRAMEWORKS" -Xlinker -rpath -Xlinker "$FRAMEWORKS"
+check "description sequences leave no gap (double spaces, bold, inline-block)" "$PROBES/ids_spacing"
 
 xcrun swiftc -parse-as-library "$PROBES/../App/Zoom.swift" "$PROBES/../App/KeyShortcut.swift" "$PROBES/zoom_keys.swift" -o "$PROBES/zoom_keys" 2>/dev/null
 check "zoom shortcuts (⌘/⌃ with =/+/-/_/0)" "$PROBES/zoom_keys"
