@@ -2,9 +2,10 @@ import AppKit
 
 private let hardBreak = "  "
 private let codeFences = ["```", "~~~"]
+private let headingMarker = "#"
 
 /// Markdown joins consecutive lines into one paragraph unless a line ends with two spaces (or a backslash).
-/// `hardened` adds those two spaces to every line followed by another text line, leaving fenced code alone.
+/// `hardened` adds those two spaces to every line followed by another text line, leaving headings and fenced code alone.
 enum LineBreaks {
     static func hardened(_ markdown: String) -> String {
         var lines = markdown.components(separatedBy: "\n")
@@ -25,7 +26,7 @@ enum LineBreaks {
 
     private static func needsHardBreak(_ line: String, before nextLine: String) -> Bool {
         let isText = { (line: String) in !line.trimmingCharacters(in: .whitespaces).isEmpty }
-        guard isText(line), isText(nextLine), !isFence(nextLine) else { return false }
+        guard isText(line), isText(nextLine), !isFence(nextLine), !line.hasPrefix(headingMarker) else { return false }
         return !line.hasSuffix(hardBreak) && !line.hasSuffix("\\")
     }
 

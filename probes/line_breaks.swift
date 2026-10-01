@@ -30,6 +30,7 @@ enum LineBreaksProbe {
         expect("stray trailing whitespace becomes exactly two spaces", "a \nb\t\nc", "a  \nb  \nc")
         expect("fenced code blocks stay untouched", "a\n```\nx\ny\n```\nb\nc\n", "a\n```\nx\ny\n```\nb  \nc\n")
         expect("tilde fences too", "~~~\nx\ny\n~~~\n", "~~~\nx\ny\n~~~\n")
+        expect("headings get no trailing spaces", "# Title\nb\nc\n", "# Title\nb  \nc\n")
         expect("already fixed text is unchanged", "a  \nb\n", "a  \nb\n")
         fixesFile()
         print("\(failures) failure(s)")

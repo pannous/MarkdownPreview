@@ -34,3 +34,14 @@
 - `open -g -a MarkdownPreview file.md` + `screencapture -x -o -l <window id>` works while the app stays in the background.
 - `qlmanage -p file.md &` + the same capture also worked without bringing qlmanage to the front this time
   (`probes/uniscript/quicklook.png`).
+
+## Gaps after composed ideographic description sequences (WebKit)
+- Uniscript Hanzi composes ⿰讠尤 with a 1000-unit root glyph plus zero-advance components; HarfBuzz and CoreText both
+  measure exactly 1 em, so the font is fine.
+- WebKit treats every ideograph as a possible line break and measures it alone, with its own 1 em advance, whenever a
+  text node is not measured in one piece: before collapsed whitespace (double space, space + newline, tab), at the end of
+  <strong>/<em>, in an inline-block. Result: a gap of one em per component behind the composed character.
+- No font feature or `text-rendering`/`font-feature-settings`/ligature CSS helps, nor ZWJ/WJ/ZWSP/CGJ/VS. Only
+  `word-break: keep-all` does: render.js wraps each sequence in `<span class="description-sequence">`.
+- Range bounding rects count characters (3.00 em for ⿰犭句 even when composed); probes/ids_spacing.swift measures the
+  left edge of the first character to the right edge of the last instead.
