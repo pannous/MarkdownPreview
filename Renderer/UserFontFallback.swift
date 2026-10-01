@@ -39,45 +39,63 @@ enum UserFontFallback {
         Set(text.unicodeScalars.lazy.filter { !$0.isASCII })
     }
 
-    /// PostScript name → file of the sequence fonts in the font folders, scanned once: CoreText no longer finds
-    /// user-installed fonts by name (macOS 27), though its fallback still uses them
-    private static let installedFontFiles: [String: URL] = {
+    /// Loaded once per process; styleElement runs under the renderer's lock
+    private static var cache = FontCache.load()
+
+    /// PostScript name → file of the sequence fonts in the font folders: CoreText no longer finds user-installed fonts
+    /// by name (macOS 27), though its fallback still uses them
+    private static func scanFontFolders() -> [String: String] {
         let wanted = Set(sequenceFonts.map(\.postScriptName))
-        let folders = FileManager.default.urls(for: .libraryDirectory, in: [.userDomainMask, .localDomainMask]).map { $0.appendingPathComponent("Fonts") }
-        let files = folders.flatMap { (try? FileManager.default.contentsOfDirectory(at: $0, includingPropertiesForKeys: nil)) ?? [] }
+        let files = FontCache.fontFolders.flatMap { (try? FileManager.default.contentsOfDirectory(at: $0, includingPropertiesForKeys: nil)) ?? [] }
         let named = files.flatMap { file in
-            (CTFontManagerCreateFontDescriptorsFromURL(file as CFURL) as? [CTFontDescriptor] ?? []).compactMap { descriptor -> (String, URL)? in
+            (CTFontManagerCreateFontDescriptorsFromURL(file as CFURL) as? [CTFontDescriptor] ?? []).compactMap { descriptor -> (String, String)? in
                 guard let name = CTFontDescriptorCopyAttribute(descriptor, kCTFontNameAttribute) as? String, wanted.contains(name) else { return nil }
-                return (name, file)
+                return (name, file.path)
             }
         }
         return Dictionary(named, uniquingKeysWith: { first, _ in first })
-    }()
+    }
+
+    private static func installedFontFile(_ postScriptName: String) -> URL? {
+        if cache.filesByPostScriptName == nil { cache.filesByPostScriptName = scanFontFolders() }
+        return cache.filesByPostScriptName?[postScriptName].map(URL.init(fileURLWithPath:))
+    }
 
     private static func fileURL(_ font: CTFont) -> URL? {
         CTFontCopyAttribute(font, kCTFontURLAttribute) as? URL
     }
 
-    /// Family name and file of each user-installed font CoreText picks to draw `scalars`, sorted by family.
-    private static func fallbackFonts(for scalars: Set<Unicode.Scalar>) -> [(family: String, file: URL)] {
-        guard !scalars.isEmpty else { return [] }
+    /// The font CoreText picks for each of `scalars`, nil for system fonts: one line with all of them, so its fallback
+    /// search runs once
+    private static func searchFallbackFonts(for scalars: [Unicode.Scalar]) -> [UInt32: FontCache.Fallback] {
         var sample = String.UnicodeScalarView()
         sample.append(contentsOf: scalars)
+        let text = String(sample) as NSString
         let line = CTLineCreateWithAttributedString(
-            NSAttributedString(string: String(sample), attributes: [NSAttributedString.Key(kCTFontAttributeName as String): baseFont]))
-        let fonts = (CTLineGetGlyphRuns(line) as? [CTRun] ?? []).compactMap { run -> (String, URL)? in
+            NSAttributedString(string: text as String, attributes: [NSAttributedString.Key(kCTFontAttributeName as String): baseFont]))
+        let pairs = (CTLineGetGlyphRuns(line) as? [CTRun] ?? []).flatMap { run -> [(UInt32, FontCache.Fallback)] in
             let font = (CTRunGetAttributes(run) as NSDictionary)[kCTFontAttributeName as String] as! CTFont
-            guard let file = fileURL(font), !file.path.hasPrefix(systemFontsPrefix) else { return nil }
-            return (CTFontCopyFamilyName(font) as String, file)
+            let userFont = fileURL(font).flatMap { $0.path.hasPrefix(systemFontsPrefix) ? nil : FontCache.Font(family: CTFontCopyFamilyName(font) as String, path: $0.path) }
+            let range = CTRunGetStringRange(run)
+            return text.substring(with: NSRange(location: range.location, length: range.length)).unicodeScalars.map { ($0.value, FontCache.Fallback(font: userFont)) }
         }
-        return Dictionary(fonts, uniquingKeysWith: { first, _ in first }).map { ($0.key, $0.value) }.sorted { $0.family < $1.family }
+        return Dictionary(pairs, uniquingKeysWith: { first, _ in first })
+    }
+
+    /// Family name and file of each user-installed font that draws some of `scalars`, sorted by family.
+    private static func fallbackFonts(for scalars: Set<Unicode.Scalar>) -> [(family: String, file: URL)] {
+        let unknown = scalars.filter { cache.fallbackByScalar[$0.value] == nil }
+        if !unknown.isEmpty { cache.fallbackByScalar.merge(searchFallbackFonts(for: Array(unknown))) { _, found in found } }
+        let fonts = scalars.compactMap { cache.fallbackByScalar[$0.value]?.font }
+        return Dictionary(fonts.map { ($0.family, URL(fileURLWithPath: $0.path)) }, uniquingKeysWith: { first, _ in first })
+            .map { ($0.key, $0.value) }.sorted { $0.family < $1.family }
     }
 
     /// The sequence fonts `scalars` need and that are installed
     private static func neededSequenceFonts(for scalars: Set<Unicode.Scalar>) -> [(font: SequenceFont, file: URL)] {
         sequenceFonts.compactMap { font in
             guard scalars.contains(where: { scalar in font.triggers.contains { $0.contains(scalar.value) } }),
-                  let file = installedFontFiles[font.postScriptName] else { return nil }
+                  let file = installedFontFile(font.postScriptName) else { return nil }
             return (font, file)
         }
     }
@@ -96,8 +114,10 @@ enum UserFontFallback {
     /// before and after its font stacks; empty when not needed.
     static func styleElement(for text: String) -> String {
         let scalars = distinctScalars(text)
+        let cacheBefore = (cache.fallbackByScalar.count, cache.filesByPostScriptName == nil)
         let fallback = fallbackFonts(for: scalars)
         let sequence = neededSequenceFonts(for: scalars)
+        if (cache.fallbackByScalar.count, cache.filesByPostScriptName == nil) != cacheBefore { cache.save() }
         guard !fallback.isEmpty || !sequence.isEmpty else { return "" }
         let faces = sequence.map { fontFace($0.font.alias, $0.file, unicodeRange: $0.font.unicodeRange, sizeAdjust: $0.font.sizeAdjust) } + fallback.map { fontFace($0.family, $0.file) }
         var variables: [String] = []

@@ -31,6 +31,17 @@ check "no fallback fonts when system fonts suffice" bash -c "! grep -q '<style>:
 loads_no_remote_assets() { ! grep -qE '<(script|link)[^>]+(src|href)="http' <<<"$html"; }
 check "renderer loads no remote scripts/styles" loads_no_remote_assets
 
+# font lookups are cached on disk: a cold and a warm render must agree, and the warm one skips CoreText's fallback search
+FONT_CACHE="$HOME/Library/Caches/com.pannous.MarkdownPreview/user-fonts.json"
+rm -f "$FONT_CACHE"
+cold_html="$(./render_cli "$PROBES/fonts/many_characters.md")"
+check "font cache written" test -s "$FONT_CACHE"
+warm_start=$(perl -MTime::HiRes=time -e 'print time')
+warm_html="$(./render_cli "$PROBES/fonts/many_characters.md")"
+warm_ms=$(perl -MTime::HiRes=time -e "printf '%d', (time - $warm_start) * 1000")
+check "cached render equals uncached render" test "$cold_html" = "$warm_html"
+check "cached render of 3000 distinct characters is fast (${warm_ms} ms < 100 ms)" test "$warm_ms" -lt 100
+
 uniscript_html="$(./render_cli "$PROBES/uniscript/sample.md")"
 for fragment in '<p>α β γ: this file' 'Uniscript in 𝔐arkdown</h1>' '→ ∞</li>' '→ 𝔄𝔟𝔠</li>' '→  α β γ δ </li>' '→  αθοσ  ηΩλ</li>' '→ 🔴 🤎</li>' \
   $'→ A\xf3\xa0\x81\xb2\xf3\xa0\x81\x8d</li>' '→ ∀ x ∈ ℝ</li>' '→ 𓀀𓐰𓁐 ⿰犭句</li>' '→ a literal &lt;: marker' '<strong>Bold α</strong>' '<td>ℝ</td>' \
@@ -44,6 +55,7 @@ done
 check "uniscript in wasp code blocks" grep -qF '<code class="hljs language-wasp">circle := π * r² ' <<<"$uniscript_html"
 check "uniscript marks in wasp code blocks" grep -qF '∞ <span class="uniscript-error" title="unknown uniscript entity: nosuchthing">&lt;:nosuchthing&gt;</span> <span class="uniscript-warning" title="no greek form of c">c</span>' <<<"$uniscript_html"
 check "uniscript in warp code blocks of any file" grep -qF '<code class="hljs language-warp">α + β' <(./render_cli "$PROBES/uniscript/plain.md")
+check "uniscript cn alias by pinyin" grep -qF 'Chinese by pinyin: 口 is 口.' <(./render_cli "$PROBES/uniscript/cn.md")
 check "uniscript header hidden" bash -c "! grep -q 'uniscript version' <<<\"\$0\"" "$uniscript_html"
 check "higher uniscript versions read without warning" grep -qF '<p>α under a version' <(./render_cli "$PROBES/uniscript/other_version.md")
 check "foreign uniscript version warned" grep -qF '<span class="uniscript-warning" title="unsupported uniscript version https://example.com/other">' <(./render_cli "$PROBES/uniscript/foreign_version.md")
