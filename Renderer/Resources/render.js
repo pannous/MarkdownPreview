@@ -95,12 +95,17 @@ marked.use({ extensions: [{
   renderer: ({ href, text }) => `<a href="${escapeHtml(href)}">${escapeHtml(text.trim())}</a>`,
 }] });
 
-// WebKit measures every ideograph of a line on its own, as a possible line break; a composed ideographic description
-// sequence (⿰讠尤) then keeps an em per component and leaves a wide gap behind it, unless it is kept in one piece
-const descriptionSequence = /[\u2FF0-\u2FFF][\u2E80-\u2FFF\u3000-\u9FFF\uF900-\uFAFF\u{20000}-\u{3FFFF}]*/gu;
+// Runs of prose wrapped in a span of their own class (style.css):
+// - description-sequence: WebKit measures every ideograph of a line on its own, as a possible line break; a composed
+//   ideographic description sequence (⿰讠尤) then keeps an em per component and leaves a wide gap behind it
+// - stacked-hieroglyphs: a vertical group (𓀀𓐰𓁐) shares one sign's height, so each sign is drawn at half size
+const spannedRuns = [
+  [/[\u2FF0-\u2FFF][\u2E80-\u2FFF\u3000-\u9FFF\uF900-\uFAFF\u{20000}-\u{3FFFF}]*/gu, 'description-sequence'],
+  [/[\u{13000}-\u{143FF}]*\u{13430}[\u{13000}-\u{143FF}]*/gu, 'stacked-hieroglyphs'],
+];
 const textBetweenTags = />[^<]+</g;
-const keepDescriptionSequencesTogether = html => html.replace(textBetweenTags,
-  text => text.replace(descriptionSequence, sequence => `<span class="description-sequence">${sequence}</span>`));
+const spanRuns = html => html.replace(textBetweenTags, text => spannedRuns.reduce(
+  (spanned, [run, className]) => spanned.replace(run, match => `<span class="${className}">${match}</span>`), text));
 
 const inlineImageSources = html =>
   html.replace(/(<img\b[^>]*?\bsrc=")([^"]*)(")/gi, (match, before, source, after) => before + resolveImage(source) + after);
@@ -109,5 +114,5 @@ const inlineImageSources = html =>
 function renderMarkdown(source, hasUniscriptHeader = false, versionWarning = null) {
   uniscriptEnabled = hasUniscriptHeader || source.startsWith(uniscriptMarker);
   const warning = versionWarning ? `<p>${uniscriptMarked('uniscript-warning', versionWarning, versionWarning)}</p>\n` : '';
-  return warning + keepDescriptionSequencesTogether(inlineImageSources(marked.parse(source)));
+  return warning + spanRuns(inlineImageSources(marked.parse(source)));
 }

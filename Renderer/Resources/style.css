@@ -37,8 +37,9 @@ table { display: block; width: max-content; max-width: 100%; overflow: auto; bor
 th, td { padding: 6px 13px; border: 1px solid var(--border); }
 th { font-weight: 600; background: var(--subtle); }
 tr:nth-child(2n) td { background: var(--row); }
-/* see keepDescriptionSequencesTogether in render.js */
+/* see spannedRuns in render.js */
 .description-sequence { word-break: keep-all; }
+.stacked-hieroglyphs { font-size: 130%; }
 kbd { padding: 2px 5px; font-size: 0.8em; border: 1px solid var(--border); border-radius: 6px; background: var(--subtle); }
 
 #table-of-contents {
