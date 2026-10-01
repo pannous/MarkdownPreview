@@ -5,6 +5,39 @@
 能	néng  ⿰⺝匕  
 得	dé ⿰彳寸 ≠ 付  
 
+⿸⺶目  
+⿸⺶木  
+⿵冂木  
+⿵冂目  
+⿺辶首  
+道	dào  ⿺辶目  
+然	rán	⿱犬灬  ⿱人灬  
+现	xiàn ⿰讠见 ≠ 伣  
+jīng:经 ⿰讠⿱人工  ⿱人工  
+dū:都   ⿰土⻏   ⿰日⻏  ≠ 耶  
+meí:没:⿰氵九 
+qǐ:起:⿺辶己  
+xiǎng:想: ⿰讠心
+yì:意:  ⿰讠⿱立日  
+jiāng:将:⿰丬夕 寸 𪧷 qiáng ?  
+zuì:最:⿱日又  ≠  取  
+wù:物:⿰讠勿 
+bèi:被:⿰讠皮 
+děng:等:⿱⺮寸
+xīn:新:⿰立斤  ⿰讠斤 ≠ 沂 近  
+tè:特:⿰讠寸 ≠ 付 
+xìn:信:⿰亻讠 
+tōng:通:⿺辶同 
+jiāo:教:⿰讠攵 
+tí:提:⿰扌日 
+jiě:解: ⿱刀牛  
+zhēn:真:⿱十日 ≠ 早 具 	  
+tí:题:   ⿺辶页  
+jiàn:建:⿺廴丨  
+zuò:做:⿰亻攵  
+dé:德:⿰彳⿱十罒 
+gǎn:感:⿱口心 ⿳一口心  ⿱戌心 xián xīn    𠮛 ⿱一口  
+
 
 # Complex
 Characters up to 8 strokes are supported!  
@@ -20,39 +53,11 @@ Characters up to 8 strokes are supported!
 Only two stackings are allowed and not all combinations:  
 ⿴囗⿰电电 While conceptually easy, we can only 囗-wrap simple characters.  
 
-⿸⺶目  
-⿸⺶木  
-⿵冂木  
-⿵冂目  
-⿺辶首  
-道	dào  ⿺辶目  
-然	rán	⿱犬灬  ⿱人灬  
-现	xiàn ⿰讠见 ≠ 伣  
-jīng:经 ⿰讠⿱人工  ⿱人工  NOPE 𢀖  
-dū:都   ⿰土⻏ ugly:(  ⿰日⻏  ≠ 耶  
-meí:没:⿰氵九 shui shū  NOPE 𠘧  	汉	hàn ƒƒƒ!  
-qǐ:起:⿺辶己  
-xiǎng:想: ⿰讠心   xiāng xīn  
-yì:意:  ⿰讠⿱立日   ≠ 愔  (not 音)  
-jiāng:将:⿰丬夕寸𪧷 qiáng ?  
-zuì:最:⿱日又  rì qǔ  取  
-wù:物:⿰讠勿 niú wù  
-bèi:被:⿰讠皮 yī pí  
-děng:等:⿱⺮寸 zhú sì  
-xīn:新:⿰立斤  
-xīn:新:⿰讠斤 qīn jīn  ≠ 沂 近  
-tè:特:⿰讠寸 ≠ 付 ≈  ⿰彳寸 得	dé  
-xìn:信:⿰亻讠 rén yán  
 tōng:通:⿺辶同 chuò   ⿺辶⿱一口  ⿺辶𠮛   NOPE   ⿱口一  
-jiāo:教:⿰讠攵 xiaò pū  
-tí:提:⿰扌日 shǒu shì  是  
-jiě:解: ⿱刀牛  daō niú  jiaǒ  
-zhēn:真:⿱十日 具 shí jù   <>早	zǎo  
-tí:题:   ⿺辶页  
-gǎn:感:⿱口心 ⿳一口心 xián xīn    𠮛 ⿱一口  
-jiàn:建:⿺廴丨  聿 yǐn yù  
-zuò:做:⿰亻攵  故 rén gù  
-dé:德:⿰彳⿱十罒  𢛳 chì ?  ⿳⿱十罒一心
+jīng:经 ⿰讠⿱人工  ⿱人工  NOPE 𢀖  
+meí:没:⿰氵九 shui shū  NOPE 𠘧  	汉	hàn ƒƒƒ!  
+yì:意:  ⿰讠⿱立日   ≠ 愔  (not 音)  
+gǎn:感:⿱口心 ⿳一口心  ⿱戌心 xián xīn    𠮛 ⿱一口  
 
 <:cn zao>  
 <:chinese zao>  
