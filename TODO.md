@@ -22,3 +22,6 @@ TODO: Clicking a [[wiki link]] opens a tab via NSDocumentController (same path a
 DONE: Extended hieroglyphs (Aegyptus private use, <:gardiner A1C>) were 1.6× smaller than standard ones in the app: fallback fonts covering U+13000 now get the same 155% size-adjust.
 DONE: Vertical hieroglyph groups (𓀀𓐰𓁐) drawn 130% so stacked signs are not half-size; Egyptian only.
 DONE: Standard hieroglyphs sat high (baseline) next to Aegyptus' extended ones (descender): NewGardinerOmni and Noto Egyptian lowered in the uniscript font build.
+- DONE second window instead of a tab (files opened with open -g, restored windows): every document window joins the existing tab group (Tabs.join, probes/one_window.sh)
+- DONE wiki links to missing pages did nothing silently: searched in the folder tree, else created and opened in the editor (probes/wiki_links/resolve.swift)
+- probes/test.sh fails "user-installed fonts named for rare glyphs" and "uniscript: renderer emits → 𓀀𓐰𓁐 ⿰犭句" (the stacked-hieroglyphs span from ec9da20 changes the expected HTML)

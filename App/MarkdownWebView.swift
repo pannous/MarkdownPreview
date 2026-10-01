@@ -44,11 +44,15 @@ struct MarkdownWebView: NSViewRepresentable {
             self.webView = webView
             visibilityObservers = [NSWindow.didChangeOcclusionStateNotification, NSWindow.didBecomeKeyNotification].map { name in
                 NotificationCenter.default.addObserver(forName: name, object: nil, queue: .main) { [weak self] note in
-                    guard let self, note.object as? NSWindow === webView.window else { return }
+                    guard let self, let window = webView.window, note.object as? NSWindow === window else { return }
+                    Tabs.join(window)
                     loadIfVisible()
                 }
             }
-            DispatchQueue.main.async { [weak self] in self?.loadIfVisible() }
+            DispatchQueue.main.async { [weak self] in
+                if let window = webView.window { Tabs.join(window) }
+                self?.loadIfVisible()
+            }
             foldingObserver = NotificationCenter.default.addObserver(forName: Folding.notification, object: nil, queue: .main) { [weak self] note in
                 guard let action = note.object as? Folding.Action, let webView = self?.webView, webView.window?.isKeyWindow == true else { return }
                 webView.evaluateJavaScript(action.rawValue)
@@ -82,9 +86,21 @@ struct MarkdownWebView: NSViewRepresentable {
             if isAnchorInCurrentDocument(url) { return decisionHandler(.allow) }
             decisionHandler(.cancel)
             if url.isFileURL && markdownExtensions.contains(url.pathExtension.lowercased()) {
-                NSDocumentController.shared.openDocument(withContentsOf: url, display: true) { _, _, _ in }
+                openPage(url)
             } else {
                 NSWorkspace.shared.open(url)
+            }
+        }
+
+        /// A page found anywhere below the document opens as a tab; one found nowhere is created and opened in the editor
+        private func openPage(_ link: URL) {
+            let page = FileManager.default.fileExists(atPath: link.path) ? link : WikiLinks.resolve(link, from: fileURL)
+            guard let page else {
+                do { Editor.open(try WikiLinks.create(link)) } catch { NSApp.presentError(error) }
+                return
+            }
+            NSDocumentController.shared.openDocument(withContentsOf: page, display: true) { _, _, error in
+                if let error { NSApp.presentError(error) }
             }
         }
 

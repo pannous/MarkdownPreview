@@ -88,6 +88,8 @@ check "section folding (⌘/⌃ [ ], click, survives reload) in an offscreen WKW
 
 xcrun swiftc -parse-as-library "$PROBES/../App/LineBreaks.swift" "$PROBES/line_breaks.swift" -o "$PROBES/line_breaks" 2>/dev/null
 check "Fix button turns newlines into hard line breaks (fences untouched)" "$PROBES/line_breaks"
+xcrun swiftc -parse-as-library "$PROBES/../App/WikiLinks.swift" "$PROBES/wiki_links/resolve.swift" -o "$PROBES/wiki_links/resolve" 2>/dev/null
+check "wiki links to pages elsewhere in the folder tree, missing ones created" "$PROBES/wiki_links/resolve"
 
 check "Quick Look extension enabled" bash -c "pluginkit -m -v -i $EXTENSION_ID | grep -q '^+'"
 check "Markdown extension listed" bash -c "pluginkit -m -v | grep -qi markdown"
@@ -109,6 +111,7 @@ open -a MarkdownPreview "$SAMPLE"; sleep 3
 open -a MarkdownPreview "$SAMPLE"; sleep 2
 check "reopening the same file keeps one window" test "$(osascript -e 'tell application "System Events" to count (windows of process "MarkdownPreview" whose name is "sample.md")')" = 1
 check "one instance: a second copy hands its file over and exits" "$PROBES/single_instance.sh"
+check "one window: files opened in the background become tabs" "$PROBES/one_window.sh"
 osascript -e 'tell application "MarkdownPreview" to activate' >/dev/null; sleep 1
 check "app window captured" capture_window MarkdownPreview app_window.png
 

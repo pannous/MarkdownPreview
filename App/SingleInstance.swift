@@ -3,9 +3,21 @@ import AppKit
 private let tabbingModeKey = "AppleWindowTabbingMode"
 private let ignoreSavedWindowsKey = "ApplePersistenceIgnoreState"
 
-/// Every document opens as a tab of the frontmost window, whatever the system setting says.
+/// Every document opens as a tab of the one window, whatever the system setting says.
 enum Tabs {
+    private static let documentWindows = NSHashTable<NSWindow>.weakObjects()
+
     static func preferAlways() { UserDefaults.standard.set("always", forKey: tabbingModeKey) }
+
+    /// The tabbing preference misses windows opened while the app is inactive or restored at launch: any document
+    /// window outside the existing window's tab group joins it
+    static func join(_ window: NSWindow) {
+        defer { documentWindows.add(window) }
+        guard let host = documentWindows.allObjects.lazy.map({ $0.tabGroup?.selectedWindow ?? $0 })
+            .first(where: { $0 !== window && $0.isVisible && !($0.tabbedWindows ?? [$0]).contains(window) }) else { return }
+        host.addTabbedWindow(window, ordered: .above)
+        window.makeKeyAndOrderFront(nil)
+    }
 }
 
 /// One running copy only: a second launch (another build of the app, `open -n`) hands its files to the running
