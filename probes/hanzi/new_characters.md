@@ -27,6 +27,7 @@ Only two stackings are allowed and not all combinations:
 ⿺辶首 
 道	dào  ⿺辶目
 然	rán	⿱犬灬  ⿱人灬
+jīng:经 ⿰讠𢀖 
 
 ér:而:⿱⿱一丿⿵冂⿰丨丨  yī piě jiōng shù gǔn shù gǔn  
 zhaō:着:⿸⺶目 yáng mù
