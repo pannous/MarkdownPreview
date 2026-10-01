@@ -21,3 +21,4 @@ DONE: One app instance (second copies hand their files over), every document and
 TODO: Clicking a [[wiki link]] opens a tab via NSDocumentController (same path as open events, verified); the click itself is not exercised by a probe (needs UI).
 DONE: Extended hieroglyphs (Aegyptus private use, <:gardiner A1C>) were 1.6× smaller than standard ones in the app: fallback fonts covering U+13000 now get the same 155% size-adjust.
 DONE: Vertical hieroglyph groups (𓀀𓐰𓁐) drawn 130% so stacked signs are not half-size; Egyptian only.
+DONE: Standard hieroglyphs sat high (baseline) next to Aegyptus' extended ones (descender): NewGardinerOmni and Noto Egyptian lowered in the uniscript font build.

@@ -45,3 +45,6 @@
   `word-break: keep-all` does: render.js wraps each sequence in `<span class="description-sequence">`.
 - Range bounding rects count characters (3.00 em for ⿰犭句 even when composed); probes/ids_spacing.swift measures the
   left edge of the first character to the right edge of the last instead.
+- Hieroglyph baseline: NewGardinerOmni and Noto Egyptian stood signs on the baseline, Aegyptus (extended, U+F3000…) on
+  the descender (−0.17 em). Fixed in the fonts, not the app: ~/dev/uniscript `fonts/uniscript_fonts.py egyptian --install`
+  lowers both (scaled composite components need their offsets compensated). Originals in uniscript fonts/sources/.
