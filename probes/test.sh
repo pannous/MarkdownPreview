@@ -70,6 +70,9 @@ check "zoom shortcuts (⌘/⌃ with =/+/-/_/0)" "$PROBES/zoom_keys"
 xcrun swiftc -parse-as-library "$PROBES/../App/Folding.swift" "$PROBES/../App/KeyShortcut.swift" "$PROBES/fold_sections.swift" -o "$PROBES/fold_sections" 2>/dev/null
 check "section folding (⌘/⌃ [ ], click, survives reload) in an offscreen WKWebView" "$PROBES/fold_sections"
 
+xcrun swiftc -parse-as-library "$PROBES/../App/LineBreaks.swift" "$PROBES/line_breaks.swift" -o "$PROBES/line_breaks" 2>/dev/null
+check "Fix button turns newlines into hard line breaks (fences untouched)" "$PROBES/line_breaks"
+
 check "Quick Look extension enabled" bash -c "pluginkit -m -v -i $EXTENSION_ID | grep -q '^+'"
 check "Markdown extension listed" bash -c "pluginkit -m -v | grep -qi markdown"
 

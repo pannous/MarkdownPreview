@@ -30,9 +30,38 @@ struct EditButton: View {
         Button { Editor.open(fileURL) } label: { Label("Edit", systemImage: "square.and.pencil") }
             .keyboardShortcut("e")
             .help("Edit in \(Editor.name) (⌘E)")
-            .buttonStyle(.bordered)
-            .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 6))
-            .padding(12)
-            .padding(.trailing, scrollerClearance)
+            .floating()
+    }
+}
+
+/// Fix (⌘⇧L) rewrites the file so every newline inside a paragraph becomes a hard line break; live reload shows the result.
+struct FixLineBreaksButton: View {
+    let fileURL: URL
+
+    var body: some View {
+        Button { LineBreaks.fix(fileURL) } label: { Label("Fix", systemImage: "text.append") }
+            .keyboardShortcut("l", modifiers: [.command, .shift])
+            .help("Add two trailing spaces so every newline shows as a line break (⌘⇧L)")
+            .floating()
+    }
+}
+
+/// The buttons floating over the top right corner of the page.
+struct FileButtons: View {
+    let fileURL: URL
+
+    var body: some View {
+        HStack {
+            FixLineBreaksButton(fileURL: fileURL)
+            EditButton(fileURL: fileURL)
+        }
+        .padding(12)
+        .padding(.trailing, scrollerClearance)
+    }
+}
+
+private extension View {
+    func floating() -> some View {
+        buttonStyle(.bordered).background(.regularMaterial, in: RoundedRectangle(cornerRadius: 6))
     }
 }

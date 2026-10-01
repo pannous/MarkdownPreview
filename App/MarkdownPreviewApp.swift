@@ -33,7 +33,7 @@ struct MarkdownPreviewApp: App {
         DocumentGroup(viewing: MarkdownDocument.self) { file in
             if let fileURL = file.fileURL {
                 MarkdownWebView(fileURL: fileURL)
-                    .overlay(alignment: .topTrailing) { EditButton(fileURL: fileURL) }
+                    .overlay(alignment: .topTrailing) { FileButtons(fileURL: fileURL) }
                     .frame(minWidth: 480, minHeight: 360)
             }
         }
