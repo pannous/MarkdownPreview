@@ -46,9 +46,10 @@ xìn:信:⿰亻讠 rén yán
 tōng:通:⿺辶同 chuò   ⿺辶  ⿺辶𠮛   NOPE  
 jiāo:教:⿰讠攵 xiaò pū  
 tí:提:⿰扌日 shǒu shì  是  
-jiě:解: ⿱刀牛  daō niú  jiaǒ
+jiě:解: ⿱刀牛  daō niú  jiaǒ  
 zhēn:真:⿱十日 具 shí jù
 
+<:chinese zao>
 <:chinese ri>
 
 ér:而:⿱⿱一丿⿵冂⿰丨丨  yī piě jiōng shù gǔn shù gǔn  
