@@ -95,6 +95,16 @@ marked.use({ extensions: [{
   renderer: ({ href, text }) => `<a href="${escapeHtml(href)}">${escapeHtml(text.trim())}</a>`,
 }] });
 
+// HTML shows a run of spaces as one anyway, but WebKit lays out the text before a collapsed run unshaped: a composed
+// ideographic description sequence (⿰讠尤) then keeps an em per component and leaves a wide gap behind it
+const collapsibleWhitespace = /[ \t\n]{2,}/g;
+const collapsedWhitespace = run => run.includes('\n') ? '\n' : ' ';
+marked.use({
+  walkTokens(token) {
+    if (token.type === 'text' && !token.tokens) token.text = token.text.replace(collapsibleWhitespace, collapsedWhitespace);
+  },
+});
+
 const inlineImageSources = html =>
   html.replace(/(<img\b[^>]*?\bsrc=")([^"]*)(")/gi, (match, before, source, after) => before + resolveImage(source) + after);
 
