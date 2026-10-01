@@ -30,7 +30,7 @@ Only two stackings are allowed and not all combinations:
 现	xiàn ⿰讠见 ≠ 伣  
 jīng:经 ⿰讠⿱人工  ⿱人工  NOPE 𢀖  
 dū:都   ⿰土⻏ ugly:(  ⿰日⻏  ≠ 耶  
-meí:没:⿰氵又 shui shū  	汉	hàn ƒƒƒ!
+meí:没:⿰氵𠘧 shui shū  	汉	hàn ƒƒƒ!
 
 ér:而:⿱⿱一丿⿵冂⿰丨丨  yī piě jiōng shù gǔn shù gǔn  
 zhaō:着:⿸⺶目 yáng mù
