@@ -33,7 +33,7 @@ dū:都   ⿰土⻏ ugly:(  ⿰日⻏  ≠ 耶
 meí:没:⿰氵九 shui shū  NOPE 𠘧  	汉	hàn ƒƒƒ!  
 qǐ:起:⿺辶己  
 xiǎng:想: ⿰讠心   xiāng xīn
-
+yì:意:  ⿰讠音 ≠ 愔
 
 ér:而:⿱⿱一丿⿵冂⿰丨丨  yī piě jiōng shù gǔn shù gǔn  
 zhaō:着:⿸⺶目 yáng mù
