@@ -23,8 +23,8 @@ Only two stackings are allowed and not all combinations:
 ⿸⺶目  
 ⿸⺶木  
 ⿵冂木  
-⿵冂目
-⿺辶首 
+⿵冂目  
+⿺辶首  
 道	dào  ⿺辶目
 然	rán	⿱犬灬  ⿱人灬
 jīng:经 ⿰讠⿱人工  ⿱人工  NOPE 𢀖
