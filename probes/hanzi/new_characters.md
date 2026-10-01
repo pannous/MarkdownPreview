@@ -39,7 +39,7 @@ zuì:最:⿱日又  rì qǔ  取
 wù:物:⿰讠勿 niú wù  
 bèi:被:⿰讠皮 yī pí  
 děng:等:⿱⺮寸 zhú sì  
-xīn:新:⿰斤立  
+xīn:新:⿰立斤  
 xīn:新:⿰讠斤 qīn jīn  ≠ 沂 近
 
 ér:而:⿱⿱一丿⿵冂⿰丨丨  yī piě jiōng shù gǔn shù gǔn  
