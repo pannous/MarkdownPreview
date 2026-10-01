@@ -48,7 +48,8 @@ jiāo:教:⿰讠攵 xiaò pū
 tí:提:⿰扌日 shǒu shì  是  
 jiě:解: ⿱刀牛  daō niú  jiaǒ  
 zhēn:真:⿱十日 具 shí jù   <>早	zǎo  
-tí:题:   ⿺辶页
+tí:题:   ⿺辶页  ⿺辶见
+见
 
 <:cn zao>  
 <:chinese zao>  
