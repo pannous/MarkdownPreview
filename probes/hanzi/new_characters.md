@@ -43,9 +43,10 @@ xīn:新:⿰立斤
 xīn:新:⿰讠斤 qīn jīn  ≠ 沂 近  
 tè:特:⿰讠寸 ≠ 付 ≈  ⿰彳寸 得	dé  
 xìn:信:⿰亻讠 rén yán  
-tōng:通:⿺辶同 chuò   ⿺辶  ⿺辶𠮛   NOPE
-jiāo:教:⿰讠攵 xiaò pū
+tōng:通:⿺辶同 chuò   ⿺辶  ⿺辶𠮛   NOPE  
+jiāo:教:⿰讠攵 xiaò pū  
 tí:提:⿰扌日 shǒu shì  是
+jiě:解: ⿱刀牛  daō niú  jiaǒ
 
 <:chinese ri>
 
