@@ -27,6 +27,7 @@ for fragment in '<table>' '<th align="center">Tables</th>' 'class="hljs-keyword"
   check "renderer emits $fragment" grep -qF "$fragment" <<<"$html"
 done
 check "user-installed fonts named for rare glyphs" grep -qF -- '--fallback-fonts: "Oracular", "開元小篆"' <(./render_cli "$PROBES/fonts/rare_glyphs.md")
+check "extended hieroglyph fonts enlarged like the standard ones" grep -qE '@font-face \{ font-family: "Aegyptus"; src: url\("[^"]+"\); size-adjust: 155%; \}' <(./render_cli "$PROBES/uniscript/a1c.md")
 check "no fallback fonts when system fonts suffice" bash -c "! grep -q '<style>:root' <<<\"\$0\"" "$html"
 loads_no_remote_assets() { ! grep -qE '<(script|link)[^>]+(src|href)="http' <<<"$html"; }
 check "renderer loads no remote scripts/styles" loads_no_remote_assets

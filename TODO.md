@@ -19,3 +19,4 @@ DONE: Startup: restored tabs load lazily (only the selected tab renders and star
 TODO: Lazy tab loading verified at launch (1 web process, selected tab loads); switching to a not-yet-loaded tab only reasoned (didBecomeKey), not exercised by a probe (needs UI).
 DONE: One app instance (second copies hand their files over), every document and .md link opens as a tab; install.sh unregisters the build copy.
 TODO: Clicking a [[wiki link]] opens a tab via NSDocumentController (same path as open events, verified); the click itself is not exercised by a probe (needs UI).
+DONE: Extended hieroglyphs (Aegyptus private use, <:gardiner A1C>) were 1.6× smaller than standard ones in the app: fallback fonts covering U+13000 now get the same 155% size-adjust.

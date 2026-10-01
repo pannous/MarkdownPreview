@@ -9,6 +9,8 @@ struct FontCache: Codable {
     struct Font: Codable, Equatable {
         let family: String
         let path: String
+        /// Covers the standard hieroglyph block, so it is enlarged like the sequence hieroglyph font
+        let drawsHieroglyphs: Bool
     }
 
     /// Characters a system font draws are stored without a font

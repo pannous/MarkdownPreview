@@ -21,10 +21,13 @@ enum UserFontFallback {
     }
 
     static let scheme = "userfont"
-    /// NewGardinerOmni fits a whole quadrat into one em, so a stacked group looks cramped next to Latin text
+    /// NewGardinerOmni fits a whole quadrat into one em, so a stacked group looks cramped next to Latin text; other
+    /// hieroglyph fonts (Aegyptus for extended signs) draw signs as tall, so they get the same scale
     private static let hieroglyphScale = "155%"
     private static let baseFont = CTFontCreateUIFontForLanguage(.system, 16, nil)!
     private static let systemFontsPrefix = "/System/"
+    /// A1, the first sign of the standard block: a font covering it draws hieroglyphs, extended ones (Aegyptus' private use) too
+    private static let hieroglyphProbe: [UniChar] = Array("\u{13000}".utf16)
     private static let sequenceFonts = [
         SequenceFont(alias: "Sequence Hieroglyphs", postScriptName: "NewGardinerOmni-Regular",
                      triggers: [0x13430...0x1345F], unicodeRange: "U+13000-143FF", sizeAdjust: hieroglyphScale),
@@ -75,20 +78,25 @@ enum UserFontFallback {
             NSAttributedString(string: text as String, attributes: [NSAttributedString.Key(kCTFontAttributeName as String): baseFont]))
         let pairs = (CTLineGetGlyphRuns(line) as? [CTRun] ?? []).flatMap { run -> [(UInt32, FontCache.Fallback)] in
             let font = (CTRunGetAttributes(run) as NSDictionary)[kCTFontAttributeName as String] as! CTFont
-            let userFont = fileURL(font).flatMap { $0.path.hasPrefix(systemFontsPrefix) ? nil : FontCache.Font(family: CTFontCopyFamilyName(font) as String, path: $0.path) }
+            let userFont = fileURL(font).flatMap { $0.path.hasPrefix(systemFontsPrefix) ? nil : FontCache.Font(
+                family: CTFontCopyFamilyName(font) as String, path: $0.path, drawsHieroglyphs: drawsHieroglyphs(font)) }
             let range = CTRunGetStringRange(run)
             return text.substring(with: NSRange(location: range.location, length: range.length)).unicodeScalars.map { ($0.value, FontCache.Fallback(font: userFont)) }
         }
         return Dictionary(pairs, uniquingKeysWith: { first, _ in first })
     }
 
-    /// Family name and file of each user-installed font that draws some of `scalars`, sorted by family.
-    private static func fallbackFonts(for scalars: Set<Unicode.Scalar>) -> [(family: String, file: URL)] {
+    private static func drawsHieroglyphs(_ font: CTFont) -> Bool {
+        var glyphs = [CGGlyph](repeating: 0, count: hieroglyphProbe.count)
+        return CTFontGetGlyphsForCharacters(font, hieroglyphProbe, &glyphs, hieroglyphProbe.count)
+    }
+
+    /// Each user-installed font that draws some of `scalars`, sorted by family.
+    private static func fallbackFonts(for scalars: Set<Unicode.Scalar>) -> [FontCache.Font] {
         let unknown = scalars.filter { cache.fallbackByScalar[$0.value] == nil }
         if !unknown.isEmpty { cache.fallbackByScalar.merge(searchFallbackFonts(for: Array(unknown))) { _, found in found } }
         let fonts = scalars.compactMap { cache.fallbackByScalar[$0.value]?.font }
-        return Dictionary(fonts.map { ($0.family, URL(fileURLWithPath: $0.path)) }, uniquingKeysWith: { first, _ in first })
-            .map { ($0.key, $0.value) }.sorted { $0.family < $1.family }
+        return Dictionary(fonts.map { ($0.family, $0) }, uniquingKeysWith: { first, _ in first }).values.sorted { $0.family < $1.family }
     }
 
     /// The sequence fonts `scalars` need and that are installed
@@ -119,7 +127,7 @@ enum UserFontFallback {
         let sequence = neededSequenceFonts(for: scalars)
         if (cache.fallbackByScalar.count, cache.filesByPostScriptName == nil) != cacheBefore { cache.save() }
         guard !fallback.isEmpty || !sequence.isEmpty else { return "" }
-        let faces = sequence.map { fontFace($0.font.alias, $0.file, unicodeRange: $0.font.unicodeRange, sizeAdjust: $0.font.sizeAdjust) } + fallback.map { fontFace($0.family, $0.file) }
+        let faces = sequence.map { fontFace($0.font.alias, $0.file, unicodeRange: $0.font.unicodeRange, sizeAdjust: $0.font.sizeAdjust) } + fallback.map { fontFace($0.family, URL(fileURLWithPath: $0.path), sizeAdjust: $0.drawsHieroglyphs ? hieroglyphScale : nil) }
         var variables: [String] = []
         if !sequence.isEmpty { variables.append("--sequence-fonts: \(sequence.map { cssString($0.font.alias) }.joined(separator: ", ")),;") }
         if !fallback.isEmpty { variables.append("--fallback-fonts: \(fallback.map { cssString($0.family) }.joined(separator: ", "));") }
