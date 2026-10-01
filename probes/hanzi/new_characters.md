@@ -48,8 +48,9 @@ jiāo:教:⿰讠攵 xiaò pū
 tí:提:⿰扌日 shǒu shì  是  
 jiě:解: ⿱刀牛  daō niú  jiaǒ  
 zhēn:真:⿱十日 具 shí jù   <>早	zǎo  
-tí:题:   ⿺辶页  
-jiàn:建:⿺廴丨  聿 yǐn yù
+tí:题:   ⿺辶页 
+gǎn:感:⿱𠮛心 xián xīn 
+jiàn:建:⿺廴丨  聿 yǐn yù  
 zuò:做:⿰亻攵  故 rén gù  
 dé:德:⿰彳⿱十罒  𢛳 chì ?  ⿳⿱十罒一心
 
