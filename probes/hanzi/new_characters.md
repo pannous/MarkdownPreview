@@ -35,8 +35,9 @@ qǐ:起:⿺辶己
 xiǎng:想: ⿰讠心   xiāng xīn  
 yì:意:  ⿰讠⿱立日   ≠ 愔  (not 音)  
 jiāng:将:⿰丬夕寸𪧷 qiáng ?  
-zuì:最:⿱日又  rì qǔ  取
+zuì:最:⿱日又  rì qǔ  取  
 wù:物:⿰讠勿 niú wù
+bèi:被:⿰讠皮 yī pí
 
 ér:而:⿱⿱一丿⿵冂⿰丨丨  yī piě jiōng shù gǔn shù gǔn  
 zhaō:着:⿸⺶目 yáng mù
