@@ -14,5 +14,6 @@ Some of these may not work:
 ⿰木电  
 ⿴囗电  
 ⿱宀⿰电电  
+⿴⿰电电  
 ⿱艹猫  
 ⿴囗猫  
