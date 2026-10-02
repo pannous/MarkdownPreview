@@ -3,7 +3,7 @@
 # Suggested simplifications
 就	jiù  ⿰讠尤  
 能	néng  ⿰⺝匕  
-得	dé ⿰彳寸 ≠ 付  
+得	dé ⿰彳寸 ≠ 付   ⿰彳旦
 道	dào  ⿺辶目  
 然	rán	⿱犬灬  ⿱人灬  
 现	xiàn ⿰讠见 ≠ 伣  
