@@ -23,16 +23,13 @@ marked.use({
   },
 });
 
-// Uniscript (<:alpha> → α, \:infinity → ∞) in prose of files that opt in by starting with the marker "<:",
-// and in code blocks of the languages that have it built in, in every file. Other code spans and code blocks never
-// reach inline extensions. convertUniscript is injected by Swift.
-const uniscriptMarker = '<:';
+// Uniscript (<:alpha> → α, \:infinity → ∞) in prose of every file, and in code blocks of the languages that have it
+// built in. Other code spans and code blocks never reach inline extensions. convertUniscript is injected by Swift.
 const uniscriptLanguages = new Set(['wasp', 'warp']);
 const uniscriptElementStart = /<:|\\:/;
 const uniscriptTag = /^\\:[A-Za-z0-9_-]*|^<:[^>]*>|^<:/;
 const uniscriptBlockOpener = /^<:[^\/>][^>]*>$/;
 const uniscriptBlockCloser = /<:(\/[^>]*)?>/;
-let uniscriptEnabled = false;
 
 // One tag, or a whole block `<:greek> a b <:/greek>`: an opener converts to nothing and runs to its closer
 function uniscriptElement(src) {
@@ -71,9 +68,9 @@ function uniscriptHtml(text) {
 const uniscriptExtension = {
   name: 'uniscript',
   level: 'inline',
-  start: src => uniscriptEnabled ? src.match(uniscriptElementStart)?.index : undefined,
+  start: src => src.match(uniscriptElementStart)?.index,
   tokenizer(src) {
-    if (uniscriptEnabled && uniscriptTag.test(src)) return { type: 'uniscript', raw: uniscriptElement(src) };
+    if (uniscriptTag.test(src)) return { type: 'uniscript', raw: uniscriptElement(src) };
   },
   renderer: ({ raw }) => uniscriptElementHtml(raw),
 };
@@ -110,9 +107,8 @@ const spanRuns = html => html.replace(textBetweenTags, text => spannedRuns.reduc
 const inlineImageSources = html =>
   html.replace(/(<img\b[^>]*?\bsrc=")([^"]*)(")/gi, (match, before, source, after) => before + resolveImage(source) + after);
 
-// hasUniscriptHeader: Swift removed a leading uniscript header, which switches uniscript on
-function renderMarkdown(source, hasUniscriptHeader = false, versionWarning = null) {
-  uniscriptEnabled = hasUniscriptHeader || source.startsWith(uniscriptMarker);
+// versionWarning: Swift removed a leading uniscript header of a version it cannot read
+function renderMarkdown(source, versionWarning = null) {
   const warning = versionWarning ? `<p>${uniscriptMarked('uniscript-warning', versionWarning, versionWarning)}</p>\n` : '';
   return warning + spanRuns(inlineImageSources(marked.parse(source)));
 }

@@ -46,12 +46,12 @@ public final class MarkdownRenderer {
         lock.lock(); defer { lock.unlock() }
         self.baseDirectory = baseDirectory
         let (header, body) = Self.splitUniscriptHeader(markdown)
-        let arguments: [Any] = header.map { [body, true, Self.unsupportedVersionWarning($0) ?? NSNull()] } ?? [body, false, NSNull()]
+        let arguments: [Any] = [body, header.flatMap(Self.unsupportedVersionWarning) ?? NSNull()]
         let html = context.objectForKeyedSubscript("renderMarkdown").call(withArguments: arguments).toString() ?? ""
         return UserFontFallback.styleElement(for: html) + html // html, not markdown: uniscript adds characters
     }
 
-    /// A leading `<:uniscript version="…">` header switches uniscript on and is not shown itself
+    /// A leading `<:uniscript version="…">` header is not shown itself; uniscript is on in every file
     private static func splitUniscriptHeader(_ markdown: String) -> (Header?, String) {
         guard let header = Header(of: markdown) else { return (nil, markdown) }
         return (header, String(decoding: markdown.utf8.dropFirst(header.length), as: UTF8.self))

@@ -12,3 +12,4 @@
   to a WKScriptMessageHandler (MarkdownWebView linkScript). Check with `xcrun swift probes/press_link.swift <window> <link>`
   (AXPress, no mouse) and `log show --info --predicate 'subsystem == "com.pannous.MarkdownPreview"'`.
 - SteerMouse's Back / Forward arrive in the app; ⌘[ / ⌘] are now tab switching, folding moved to ⌃[ / ⌃].
+- uniscript is on in every file now, the `<:` marker/header only hides the header and warns on foreign versions

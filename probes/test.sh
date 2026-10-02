@@ -62,6 +62,7 @@ check "higher uniscript versions read without warning" grep -qF '<p>α under a v
 check "foreign uniscript version warned" grep -qF '<span class="uniscript-warning" title="unsupported uniscript version https://example.com/other">' <(./render_cli "$PROBES/uniscript/foreign_version.md")
 check "uniscript on after a foreign header" grep -qF 'α under a version' <(./render_cli "$PROBES/uniscript/foreign_version.md")
 check "uniscript meta color as CSS" grep -qF 'Colored hieroglyph: <span style="color: red">𓀀</span>, orange A: <span style="color: #ff8800">A</span>.' <(./render_cli "$PROBES/colors/meta_color.md")
+check "uniscript in files without a header" grep -qF 'yet α and ∞ are converted' <(./render_cli "$PROBES/uniscript/headerless.md")
 check "uniscript only in files starting with <:" grep -qF 'so &lt;:alpha&gt; and &lt;:fracture A&gt; are shown' <(./render_cli "$PROBES/uniscript/plain.md")
 
 wiki_html="$(./render_cli "$PROBES/wiki_links/links.md")"
