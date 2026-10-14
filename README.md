@@ -7,6 +7,7 @@ Native macOS Markdown viewer plus a Quick Look extension, both backed by one ren
 - GitHub-flavoured Markdown: bordered tables, fenced code with syntax highlighting, task lists, strikethrough, autolinks, heading anchors.
 - Images relative to the file are inlined; follows system light/dark mode; no network needed for rendering.
 - Live reload on save (also atomic saves), scroll position kept. Links open in the default browser only when clicked; relative `.md` links open in the app.
+  `[[#Pictures]]` links to a heading of the same file, `[[page#Some Heading]]` to one in another page (slugified like heading ids).
   `[[page]]` wiki links: a page not next to the file is searched in its folder tree like Sublime's MarkdownEditing
   (any case, space/dash/underscore alike); a page found nowhere opens as a new, unsaved file in Sublime Text or VS Code
   (their command line tool; other editors get the file created with a `# page` title).

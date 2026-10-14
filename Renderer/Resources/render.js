@@ -76,9 +76,12 @@ const uniscriptExtension = {
 };
 marked.use({ extensions: [uniscriptExtension] });
 
-// [[page]], [[dir/page.md]], [[page#heading]], [[page|label]]: a relative link, ".md" implied when the page has no extension
-const wikiLink = /^\[\[([^\]|#]+)(#[^\]|]*)?(?:\|([^\]]+))?\]\]/;
+// [[page]], [[dir/page.md]], [[page#heading]], [[#heading]], [[page|label]]: a relative link, ".md" implied when the page
+// has no extension; the heading slugified like the heading ids
+const wikiLink = /^\[\[([^\]|#]*)(?:#([^\]|]*))?(?:\|([^\]]+))?\]\]/;
 const withMarkdownExtension = page => /\.[A-Za-z0-9]+$/.test(page) ? page : `${page}.md`;
+const headingAnchor = heading => heading === undefined ? '' : `#${slugify(heading)}`;
+const wikiLinkText = (page, heading) => page ? page + (heading === undefined ? '' : `#${heading}`) : heading;
 marked.use({ extensions: [{
   name: 'wikiLink',
   level: 'inline',
@@ -86,8 +89,11 @@ marked.use({ extensions: [{
   tokenizer(src) {
     const match = wikiLink.exec(src);
     if (!match) return;
-    const [raw, page, heading = '', label] = match;
-    return { type: 'wikiLink', raw, href: encodeURI(withMarkdownExtension(page.trim())) + heading, text: label ?? page + heading };
+    const [raw, rawPage, heading, label] = match;
+    const page = rawPage.trim();
+    if (!page && !heading?.trim()) return;
+    const pageHref = page ? encodeURI(withMarkdownExtension(page)) : '';
+    return { type: 'wikiLink', raw, href: pageHref + headingAnchor(heading), text: label ?? wikiLinkText(page, heading) };
   },
   renderer: ({ href, text }) => `<a href="${escapeHtml(href)}">${escapeHtml(text.trim())}</a>`,
 }] });

@@ -69,6 +69,9 @@ wiki_html="$(./render_cli "$PROBES/wiki_links/links.md")"
 for fragment in 'is <a href="docs/uniscript.md">docs/uniscript.md</a>.' '<a href="notes.md">notes</a>' '<a href="other%20page.md">the other page</a>' '<a href="guide.md#setup">guide#setup</a>' '<code>[[docs/uniscript.md]]</code>'; do
   check "wiki links: renderer emits $fragment" grep -qF "$fragment" <<<"$wiki_html"
 done
+for fragment in '<a href="#pictures">Pictures</a>' '<a href="#big-picture-ideas">ideas</a>' '<a href="guide.md#setup-steps">guide#Setup Steps</a>'; do
+  check "wiki links to headings: renderer emits $fragment" grep -qF "$fragment" <<<"$wiki_html"
+done
 
 xcrun swiftc -O -parse-as-library "$PROBES/sequence_shaping.swift" -o "$PROBES/sequence_shaping" -F "$FRAMEWORKS" -Xlinker -rpath -Xlinker "$FRAMEWORKS"
 ./render_cli "$PROBES/uniscript/groups.md" > "$PROBES/uniscript/groups.html"
