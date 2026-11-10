@@ -24,8 +24,10 @@ BUILT_APP="$BUILD_DIR/Build/Products/Release/$APP_NAME.app"
 INSTALLED_APP="$INSTALL_DIR/$APP_NAME.app"
 # Xcode copies the Uniscript resource bundle into both the app and the appex and can re-sign a copy after the appex was
 # sealed ("a sealed resource is missing or invalid"): reseal inside-out, keeping identifiers and entitlements
+# with the certificate xcodebuild chose for the team: the bare "Apple Development" is ambiguous with several in the keychain
+BUILT_IDENTITY="$(codesign -dvv "$BUILT_APP" 2>&1 | sed -n 's/^Authority=//p' | head -1)"
 for bundle in "$BUILT_APP/Contents/PlugIns/MarkdownQuickLook.appex" "$BUILT_APP"; do
-  codesign --force --sign "$SIGN_IDENTITY" --preserve-metadata=identifier,entitlements,flags "$bundle" 2>/dev/null
+  codesign --force --sign "$BUILT_IDENTITY" --preserve-metadata=identifier,entitlements,flags "$bundle"
 done
 codesign --verify --deep --strict "$BUILT_APP"
 
